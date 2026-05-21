@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDUCATORS · Centro de Mando — Survival Weekend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --teal:#00E5C4;--teal-dim:#00BFA5;--orange:#F5A623;--red:#FF3B5C;--green:#1ED98C;
+    --navy:#040D1A;--navy2:#071527;--navy3:#0C1F3A;--card:#0D1F38;--card2:#0F243F;
+    --border:rgba(0,229,196,0.15);--border-soft:rgba(255,255,255,0.08);
+    --text:#E8F4F1;--muted:rgba(232,244,241,0.55);--white:#fff;
+    --fd:'Bebas Neue',sans-serif;--fb:'Plus Jakarta Sans',sans-serif;
+  }
+  body{background:var(--navy);color:var(--text);font-family:var(--fb);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  ::selection{background:var(--teal);color:var(--navy);}
+  a{color:var(--teal);}
+
+  /* ---------- LOGIN ---------- */
+  .login-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:1.5rem;position:relative;overflow:hidden;}
+  .login-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,229,196,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,196,.04) 1px,transparent 1px);background-size:48px 48px;-webkit-mask-image:radial-gradient(ellipse at center,#000 25%,transparent 70%);mask-image:radial-gradient(ellipse at center,#000 25%,transparent 70%);}
+  .login-card{position:relative;z-index:1;width:100%;max-width:400px;background:var(--card);border:0.5px solid var(--border);border-radius:18px;padding:2.5rem;box-shadow:0 30px 80px rgba(0,0,0,.5);}
+  .login-logo{font-family:var(--fd);font-size:1.8rem;letter-spacing:.04em;text-align:center;}
+  .login-logo b{color:var(--teal);font-weight:400;}
+  .login-sub{text-align:center;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);margin-top:.25rem;margin-bottom:2rem;}
+  .field{margin-bottom:1.1rem;}
+  .field label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text);margin-bottom:.45rem;}
+  .field input,.field select{width:100%;background:var(--navy3);border:1px solid var(--border-soft);border-radius:9px;padding:.8rem 1rem;color:var(--text);font-family:var(--fb);font-size:.95rem;transition:border-color .2s,box-shadow .2s;}
+  .field input:focus,.field select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,229,196,.12);}
+  .btn{background:var(--teal);color:var(--navy);font-weight:800;font-size:.9rem;letter-spacing:.04em;text-transform:uppercase;padding:.85rem 1.5rem;border:none;border-radius:8px;cursor:pointer;width:100%;transition:transform .15s,box-shadow .15s,opacity .2s;font-family:var(--fb);}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 8px 26px rgba(0,229,196,.3);}
+  .btn:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none;}
+  .btn-sm{padding:.5rem .9rem;font-size:.74rem;width:auto;border-radius:6px;}
+  .btn-ghost{background:transparent;border:0.5px solid var(--border-soft);color:var(--muted);}
+  .btn-ghost:hover{border-color:var(--text);color:var(--text);box-shadow:none;}
+  .btn-red{background:var(--red);color:#fff;}
+  .btn-orange{background:var(--orange);}
+  .login-err{background:rgba(255,59,92,.1);border:0.5px solid var(--red);color:#ffb3c0;border-radius:8px;padding:.7rem 1rem;font-size:.82rem;margin-bottom:1rem;display:none;}
+  .login-err.show{display:block;}
+  .login-note{font-size:.74rem;color:var(--muted);text-align:center;margin-top:1.25rem;line-height:1.6;}
+  .config-warn{background:rgba(245,166,35,.1);border:0.5px solid var(--orange);color:#ffd9a0;border-radius:8px;padding:.7rem 1rem;font-size:.78rem;margin-bottom:1.25rem;display:none;}
+  .config-warn.show{display:block;}
+
+  /* ---------- APP SHELL ---------- */
+  .app{display:none;min-height:100vh;}
+  .app.show{display:block;}
+  .topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:0 1.5rem;height:60px;background:rgba(4,13,26,.92);backdrop-filter:blur(12px);border-bottom:0.5px solid var(--border);}
+  .topbar .brand{font-family:var(--fd);font-size:1.4rem;letter-spacing:.04em;display:flex;align-items:baseline;gap:.18em;}
+  .topbar .brand b{color:var(--teal);font-weight:400;}
+  .topbar .brand .chip{font-family:var(--fb);font-size:.6rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--navy);background:var(--teal);padding:.2rem .5rem;border-radius:20px;margin-left:.4rem;}
+  .topbar .right{display:flex;align-items:center;gap:1rem;}
+  .topbar .who{font-size:.78rem;color:var(--muted);}
+  .wrap{max-width:1240px;margin:0 auto;padding:2rem 1.5rem 4rem;}
+
+  /* ---------- STATS ---------- */
+  .stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1rem;margin-bottom:2rem;}
+  .stat{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:1.25rem 1.4rem;position:relative;overflow:hidden;}
+  .stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--sc,var(--teal));}
+  .stat .lbl{font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);}
+  .stat .num{font-family:var(--fd);font-size:2.6rem;line-height:1;color:var(--sc,var(--teal));margin-top:.35rem;}
+  .stat .sub{font-size:.72rem;color:var(--muted);margin-top:.2rem;}
+
+  /* ---------- TOOLBAR ---------- */
+  .toolbar{display:flex;gap:.85rem;align-items:center;flex-wrap:wrap;margin-bottom:1.25rem;}
+  .toolbar .search{flex:1;min-width:200px;position:relative;}
+  .toolbar .search input{width:100%;background:var(--card);border:1px solid var(--border-soft);border-radius:9px;padding:.7rem 1rem .7rem 2.4rem;color:var(--text);font-family:var(--fb);font-size:.9rem;}
+  .toolbar .search input:focus{outline:none;border-color:var(--teal);}
+  .toolbar .search .ico{position:absolute;left:.85rem;top:50%;transform:translateY(-50%);color:var(--muted);}
+  .toolbar select{background:var(--card);border:1px solid var(--border-soft);border-radius:9px;padding:.7rem 2.2rem .7rem 1rem;color:var(--text);font-family:var(--fb);font-size:.9rem;cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath fill='%2300E5C4' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 1rem center;}
+
+  /* ---------- TABLE ---------- */
+  .table-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;overflow:hidden;}
+  .table-scroll{overflow-x:auto;}
+  table{width:100%;border-collapse:collapse;min-width:880px;}
+  th{font-size:.64rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);text-align:left;padding:1rem 1rem;border-bottom:0.5px solid var(--border);white-space:nowrap;background:var(--navy3);}
+  td{padding:.9rem 1rem;border-bottom:0.5px solid var(--border-soft);font-size:.86rem;vertical-align:middle;}
+  tr:last-child td{border-bottom:none;}
+  tbody tr{transition:background .15s;}
+  tbody tr:hover{background:rgba(0,229,196,.04);}
+  .nm{font-weight:700;color:var(--text);}
+  .meta{font-size:.74rem;color:var(--muted);}
+  .pill{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.04em;padding:.25rem .6rem;border-radius:20px;white-space:nowrap;}
+  .pill-sede{background:rgba(0,229,196,.12);color:var(--teal);border:0.5px solid rgba(0,229,196,.3);}
+  .pill-pkg{background:rgba(245,166,35,.12);color:var(--orange);border:0.5px solid rgba(245,166,35,.3);}
+  .status{display:inline-flex;align-items:center;gap:.4rem;font-size:.72rem;font-weight:700;cursor:pointer;padding:.35rem .7rem;border-radius:20px;border:0.5px solid transparent;transition:all .15s;}
+  .status .d{width:7px;height:7px;border-radius:50%;}
+  .st-pend{background:rgba(245,166,35,.1);color:var(--orange);border-color:rgba(245,166,35,.3);}
+  .st-pend .d{background:var(--orange);}
+  .st-conf{background:rgba(30,217,140,.1);color:var(--green);border-color:rgba(30,217,140,.3);}
+  .st-conf .d{background:var(--green);}
+  .row-actions{display:flex;gap:.4rem;}
+  .iconbtn{background:var(--navy3);border:0.5px solid var(--border-soft);color:var(--muted);border-radius:7px;width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;font-size:.95rem;transition:all .15s;}
+  .iconbtn:hover{border-color:var(--teal);color:var(--teal);}
+  .iconbtn.del:hover{border-color:var(--red);color:var(--red);}
+  .empty{text-align:center;padding:4rem 1rem;color:var(--muted);}
+  .empty .big{font-size:2.5rem;margin-bottom:.75rem;}
+  .loading{text-align:center;padding:4rem 1rem;color:var(--muted);}
+  .spin{width:34px;height:34px;border:3px solid var(--border-soft);border-top-color:var(--teal);border-radius:50%;animation:spin .8s linear infinite;margin:0 auto 1rem;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+
+  /* ---------- MODAL ---------- */
+  .modal-bg{position:fixed;inset:0;background:rgba(4,13,26,.8);backdrop-filter:blur(4px);z-index:100;display:none;align-items:center;justify-content:center;padding:1.5rem;}
+  .modal-bg.show{display:flex;}
+  .modal{background:var(--card);border:0.5px solid var(--border);border-radius:18px;width:100%;max-width:560px;max-height:90vh;overflow-y:auto;padding:2rem;box-shadow:0 30px 80px rgba(0,0,0,.6);}
+  .modal h3{font-family:var(--fd);font-size:1.7rem;letter-spacing:.03em;margin-bottom:.25rem;}
+  .modal .msub{font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;}
+  .modal .field-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+  .modal .field input,.modal .field select{width:100%;background:var(--navy3);border:1px solid var(--border-soft);border-radius:9px;padding:.7rem .9rem;color:var(--text);font-family:var(--fb);font-size:.9rem;}
+  .modal-actions{display:flex;gap:.75rem;margin-top:1.5rem;}
+  .modal-actions .btn{width:auto;flex:1;}
+
+  /* comprobante preview */
+  .comp-view{background:var(--navy3);border:0.5px solid var(--border-soft);border-radius:10px;padding:1rem;text-align:center;}
+  .comp-view img{max-width:100%;border-radius:8px;}
+  .comp-view a{display:inline-block;margin-top:.5rem;font-size:.82rem;}
+
+  .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(150%);background:var(--card);border:0.5px solid var(--teal);padding:.85rem 1.4rem;border-radius:10px;font-size:.85rem;font-weight:600;z-index:200;transition:transform .3s;box-shadow:0 10px 40px rgba(0,0,0,.5);}
+  .toast.show{transform:translateX(-50%) translateY(0);}
+  .toast.err{border-color:var(--red);}
+
+  /* ---------- TABS + FINANZAS ---------- */
+  .tabs{display:flex;gap:.5rem;margin-bottom:1.75rem;border-bottom:0.5px solid var(--border);}
+  .tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--muted);font-family:var(--fb);font-weight:700;font-size:.9rem;padding:.75rem 1.1rem;cursor:pointer;transition:all .15s;margin-bottom:-1px;}
+  .tab:hover{color:var(--text);}
+  .tab.active{color:var(--teal);border-bottom-color:var(--teal);}
+  .view{display:none;animation:fade .3s ease both;}
+  .view.active{display:block;}
+  @keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+  .stats.fin{grid-template-columns:repeat(4,1fr);}
+  .fin-card{background:var(--card);border:0.5px solid var(--border);border-radius:14px;padding:1.5rem;margin-bottom:1.25rem;}
+  .fin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.1rem;}
+  .fin-head h4{font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text);}
+  .fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;}
+  .bar{height:16px;border-radius:20px;background:var(--navy3);overflow:hidden;display:flex;}
+  .bar-fill{height:100%;background:linear-gradient(90deg,var(--green),var(--teal));border-radius:20px 0 0 20px;transition:width .6s ease;}
+  .bar-legend{display:flex;gap:1.5rem;margin-top:.85rem;font-size:.8rem;color:var(--muted);}
+  .bar-legend .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:.4rem;}
+  .bar-legend b{color:var(--text);}
+  table.mini{width:100%;border-collapse:collapse;}
+  table.mini th{font-size:.62rem;letter-spacing:.08em;padding:.5rem .6rem;background:transparent;border-bottom:0.5px solid var(--border);}
+  table.mini td{padding:.6rem .6rem;font-size:.83rem;border-bottom:0.5px solid var(--border-soft);}
+  table.mini tr:last-child td{border-bottom:none;}
+  table.mini .v{font-weight:800;color:var(--teal);}
+  table.mini .vg{color:var(--green);font-weight:700;}
+  table.mini .vo{color:var(--orange);font-weight:700;}
+  .minibar{height:6px;border-radius:6px;background:var(--navy3);overflow:hidden;margin-top:.35rem;}
+  .minibar i{display:block;height:100%;background:var(--teal);}
+
+  @media(max-width:900px){.stats{grid-template-columns:repeat(2,1fr);}.stats.fin{grid-template-columns:repeat(2,1fr);}.fin-grid{grid-template-columns:1fr;}}
+  @media(max-width:560px){.stats{grid-template-columns:1fr;}.modal .field-row{grid-template-columns:1fr;}.wrap{padding:1.25rem 1rem 3rem;}.topbar .who{display:none;}}
+</style>
+</head>
+<body>
+
+<!-- ============ LOGIN ============ -->
+<div class="login-wrap" id="loginScreen">
+  <div class="login-grid"></div>
+  <div class="login-card">
+    <div class="login-logo">MED<b>ucators</b></div>
+    <div class="login-sub">Centro de Mando</div>
+
+    <div class="config-warn" id="configWarn">⚠️ Aún no has pegado tus credenciales de Supabase en el bloque <b>CONFIG</b>. Hazlo para activar el login y los datos.</div>
+    <div class="login-err" id="loginErr"></div>
+
+    <div class="field"><label>Correo de administrador</label><input type="email" id="adminEmail" placeholder="tucorreo@gmail.com" autocomplete="username"></div>
+    <div class="field"><label>Contraseña</label><input type="password" id="adminPass" placeholder="••••••••" autocomplete="current-password"></div>
+    <button class="btn" id="loginBtn" onclick="doLogin()">Ingresar</button>
+    <p class="login-note">Acceso exclusivo del equipo MEDUCATORS.<br>¿Problemas para entrar? Revisa las instrucciones de configuración.</p>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div class="app" id="app">
+  <div class="topbar">
+    <div class="brand">MED<b>ucators</b><span class="chip">Admin</span></div>
+    <div class="right">
+      <span class="who" id="whoami"></span>
+      <button class="btn btn-sm btn-ghost" onclick="exportCSV()">⬇ Exportar Excel</button>
+      <button class="btn btn-sm btn-ghost" onclick="doLogout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" data-view="inscritos" onclick="switchView('inscritos')">📋 Inscritos</button>
+      <button class="tab" data-view="finanzas" onclick="switchView('finanzas')">💰 Finanzas</button>
+    </div>
+
+    <!-- ===== VISTA INSCRITOS ===== -->
+    <div class="view active" id="view-inscritos">
+    <!-- STATS -->
+    <div class="stats" id="stats">
+      <div class="stat" style="--sc:var(--teal);"><div class="lbl">Inscritos</div><div class="num" id="s-total">0</div><div class="sub">Total registrados</div></div>
+      <div class="stat" style="--sc:var(--green);"><div class="lbl">Pagos confirmados</div><div class="num" id="s-conf">0</div><div class="sub">Cupos asegurados</div></div>
+      <div class="stat" style="--sc:var(--orange);"><div class="lbl">Pendientes</div><div class="num" id="s-pend">0</div><div class="sub">Por verificar</div></div>
+      <div class="stat" style="--sc:var(--teal);"><div class="lbl">Recaudado</div><div class="num" id="s-money">$0</div><div class="sub">Pagos confirmados</div></div>
+      <div class="stat" style="--sc:var(--orange);"><div class="lbl">Potencial</div><div class="num" id="s-pot">$0</div><div class="sub">Si todos pagan</div></div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search"><span class="ico">🔍</span><input type="text" id="search" placeholder="Buscar por nombre, correo, ciudad…" oninput="renderTable()"></div>
+      <select id="filterSede" onchange="renderTable()">
+        <option value="">Todas las sedes</option>
+        <option>Riobamba</option><option>Quito</option><option>Loja</option>
+      </select>
+      <select id="filterStatus" onchange="renderTable()">
+        <option value="">Todos los pagos</option>
+        <option value="confirmado">Confirmados</option>
+        <option value="pendiente">Pendientes</option>
+      </select>
+      <button class="btn btn-sm btn-ghost" onclick="loadData()">↻ Actualizar</button>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-card">
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Inscrito</th><th>Sede</th><th>Talleres</th><th>Código</th>
+              <th>Total</th><th>Pago</th><th>Comprob.</th><th>Registro</th><th></th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="9"><div class="loading"><div class="spin"></div>Cargando inscripciones…</div></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </div><!-- /view-inscritos -->
+
+    <!-- ===== VISTA FINANZAS ===== -->
+    <div class="view" id="view-finanzas">
+      <!-- KPIs financieros -->
+      <div class="stats fin">
+        <div class="stat" style="--sc:var(--green);"><div class="lbl">Ingresos confirmados</div><div class="num" id="f-confirmado">$0</div><div class="sub">Dinero ya recibido</div></div>
+        <div class="stat" style="--sc:var(--orange);"><div class="lbl">Por cobrar</div><div class="num" id="f-pendiente">$0</div><div class="sub">Pendiente de verificar</div></div>
+        <div class="stat" style="--sc:var(--teal);"><div class="lbl">Total proyectado</div><div class="num" id="f-total">$0</div><div class="sub">Confirmado + pendiente</div></div>
+        <div class="stat" style="--sc:var(--teal);"><div class="lbl">Ticket promedio</div><div class="num" id="f-ticket">$0</div><div class="sub">Por inscrito</div></div>
+      </div>
+
+      <!-- Barra de cobro -->
+      <div class="fin-card">
+        <div class="fin-head"><h4>Estado de cobranza</h4><span class="meta" id="f-cobro-pct">0% cobrado</span></div>
+        <div class="bar"><div class="bar-fill" id="f-bar"></div></div>
+        <div class="bar-legend">
+          <span><span class="dot" style="background:var(--green);"></span> Confirmado <b id="f-leg-conf">$0</b></span>
+          <span><span class="dot" style="background:var(--orange);"></span> Pendiente <b id="f-leg-pend">$0</b></span>
+        </div>
+      </div>
+
+      <div class="fin-grid">
+        <!-- Por sede -->
+        <div class="fin-card">
+          <div class="fin-head"><h4>💵 Ingresos por sede</h4></div>
+          <table class="mini">
+            <thead><tr><th>Sede</th><th>Inscritos</th><th>Confirmado</th><th>Pendiente</th><th>Total</th></tr></thead>
+            <tbody id="f-sede-body"></tbody>
+          </table>
+        </div>
+        <!-- Por taller -->
+        <div class="fin-card">
+          <div class="fin-head"><h4>🩺 Demanda por taller</h4></div>
+          <table class="mini">
+            <thead><tr><th>Taller</th><th>Inscritos</th><th>% del total</th></tr></thead>
+            <tbody id="f-taller-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Por método de pago + códigos -->
+      <div class="fin-grid">
+        <div class="fin-card">
+          <div class="fin-head"><h4>💳 Por método de pago</h4></div>
+          <table class="mini">
+            <thead><tr><th>Método</th><th>Inscritos</th><th>Monto</th></tr></thead>
+            <tbody id="f-metodo-body"></tbody>
+          </table>
+        </div>
+        <div class="fin-card">
+          <div class="fin-head"><h4>🏷️ Códigos / aliados más usados</h4></div>
+          <table class="mini">
+            <thead><tr><th>Código</th><th>Usos</th><th>Monto</th></tr></thead>
+            <tbody id="f-codigo-body"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div style="text-align:right;margin-top:1.25rem;">
+        <button class="btn btn-sm btn-ghost" onclick="exportCSV()">⬇ Exportar todo a Excel</button>
+      </div>
+    </div><!-- /view-finanzas -->
+  </div>
+</div>
+
+<!-- ============ MODAL EDIT ============ -->
+<div class="modal-bg" id="editModal">
+  <div class="modal">
+    <h3>Editar inscripción</h3>
+    <p class="msub" id="editId"></p>
+    <div class="field-row">
+      <div class="field"><label>Nombres</label><input id="e-nombres"></div>
+      <div class="field"><label>Apellidos</label><input id="e-apellidos"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Ciudad</label><input id="e-ciudad"></div>
+      <div class="field"><label>Universidad</label><input id="e-universidad"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Email</label><input id="e-email"></div>
+      <div class="field"><label>Teléfono</label><input id="e-telefono"></div>
+    </div>
+    <div class="field-row">
+      <div class="field"><label>Sede</label>
+        <select id="e-sede"><option>Riobamba</option><option>Quito</option><option>Loja</option></select>
+      </div>
+      <div class="field"><label>Total ($)</label><input id="e-total" type="number"></div>
+    </div>
+    <div class="field"><label>Talleres</label><input id="e-talleres"></div>
+    <div class="field"><label>Código</label><input id="e-codigo"></div>
+    <div class="field"><label>Estado del pago</label>
+      <select id="e-estado"><option value="pendiente">Pendiente</option><option value="confirmado">Confirmado</option></select>
+    </div>
+    <div class="field" id="e-comp-wrap"><label>Comprobante</label><div class="comp-view" id="e-comp"></div></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeEdit()">Cancelar</button>
+      <button class="btn" id="saveEditBtn" onclick="saveEdit()">Guardar cambios</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   ⚙️  CONFIG — Kevin, edita SOLO este bloque
+   ============================================================ */
+const CONFIG = {
+  SUPABASE_URL: "https://zfnoarsyxzqdxoqyonez.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmbm9hcnN5eHpxZHhvcXlvbmV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzMyMzAsImV4cCI6MjA5NDk0OTIzMH0.SVo0wgqIOmP2wI9bT3YgJ2mEZkvr7bm3gMiFMxKTK0g",
+  SUPABASE_TABLE: "inscripciones_survival",
+
+  // Modo de acceso:
+  //  "auth"  -> login real con Supabase Auth (recomendado). Crea tu usuario admin en Supabase.
+  //  "simple"-> clave fija aquí abajo (rápido, menos seguro; úsalo solo temporalmente).
+  AUTH_MODE: "auth",
+  SIMPLE_PASSWORD: "meducators2026"   // solo se usa si AUTH_MODE === "simple"
+};
+/* ============================================================ */
+
+let SB = null, rows = [], currentEdit = null;
+
+function init(){
+  if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY && window.supabase){
+    SB = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+    // si ya hay sesión activa, entrar directo
+    if (CONFIG.AUTH_MODE === "auth"){
+      SB.auth.getSession().then(({data})=>{ if(data.session){ enterApp(data.session.user.email); } });
+    } else if (sessionStorage.getItem('mw_admin') === '1'){
+      enterApp('Administrador');
+    }
+  } else {
+    document.getElementById('configWarn').classList.add('show');
+  }
+}
+
+// ---------- LOGIN ----------
+async function doLogin(){
+  const email = document.getElementById('adminEmail').value.trim();
+  const pass = document.getElementById('adminPass').value;
+  const errBox = document.getElementById('loginErr');
+  const btn = document.getElementById('loginBtn');
+  errBox.classList.remove('show');
+
+  if (!SB){ showErr('Falta configurar Supabase (bloque CONFIG).'); return; }
+
+  btn.disabled = true; btn.textContent = 'Ingresando…';
+  try {
+    if (CONFIG.AUTH_MODE === "simple"){
+      if (pass === CONFIG.SIMPLE_PASSWORD){ sessionStorage.setItem('mw_admin','1'); enterApp('Administrador'); }
+      else showErr('Contraseña incorrecta.');
+    } else {
+      const { data, error } = await SB.auth.signInWithPassword({ email, password: pass });
+      if (error) showErr('Correo o contraseña incorrectos.');
+      else enterApp(data.user.email);
+    }
+  } catch(e){ showErr('Error al ingresar: '+e.message); }
+  finally { btn.disabled=false; btn.textContent='Ingresar'; }
+}
+function showErr(m){ const e=document.getElementById('loginErr'); e.textContent=m; e.classList.add('show'); }
+
+function enterApp(who){
+  document.getElementById('loginScreen').style.display='none';
+  document.getElementById('app').classList.add('show');
+  document.getElementById('whoami').textContent = '👤 '+who;
+  loadData();
+}
+async function doLogout(){
+  if (CONFIG.AUTH_MODE === "auth" && SB) await SB.auth.signOut();
+  sessionStorage.removeItem('mw_admin');
+  location.reload();
+}
+
+// ---------- DATA ----------
+async function loadData(){
+  if (!SB) return;
+  document.getElementById('tbody').innerHTML = '<tr><td colspan="9"><div class="loading"><div class="spin"></div>Cargando…</div></td></tr>';
+  const { data, error } = await SB.from(CONFIG.SUPABASE_TABLE).select('*').order('fecha_registro',{ascending:false});
+  if (error){ toast('Error al cargar: '+error.message, true); document.getElementById('tbody').innerHTML=''; return; }
+  rows = (data||[]).map(r => ({ ...r, estado_pago: r.estado_pago || 'pendiente' }));
+  renderStats(); renderTable();
+}
+
+function renderStats(){
+  const total = rows.length;
+  const conf = rows.filter(r=>r.estado_pago==='confirmado');
+  const pend = total - conf.length;
+  const recaudado = conf.reduce((s,r)=>s+(+r.total||0),0);
+  const pot = rows.reduce((s,r)=>s+(+r.total||0),0);
+  document.getElementById('s-total').textContent = total;
+  document.getElementById('s-conf').textContent = conf.length;
+  document.getElementById('s-pend').textContent = pend;
+  document.getElementById('s-money').textContent = '$'+recaudado;
+  document.getElementById('s-pot').textContent = '$'+pot;
+}
+
+// ---------- VISTAS / TABS ----------
+function switchView(v){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('active', t.dataset.view===v));
+  document.querySelectorAll('.view').forEach(el=>el.classList.toggle('active', el.id==='view-'+v));
+  if (v==='finanzas') renderFinanzas();
+}
+
+const TALLER_KEYS = ['Suturas','EKG','Gasometría','Venoclisis'];
+function money(n){ return '$'+(Math.round((+n||0)*100)/100).toLocaleString('es-EC'); }
+
+function renderFinanzas(){
+  const conf = rows.filter(r=>r.estado_pago==='confirmado');
+  const totalConf = conf.reduce((s,r)=>s+(+r.total||0),0);
+  const totalPend = rows.filter(r=>r.estado_pago!=='confirmado').reduce((s,r)=>s+(+r.total||0),0);
+  const totalAll = totalConf + totalPend;
+  const ticket = rows.length ? totalAll/rows.length : 0;
+
+  document.getElementById('f-confirmado').textContent = money(totalConf);
+  document.getElementById('f-pendiente').textContent = money(totalPend);
+  document.getElementById('f-total').textContent = money(totalAll);
+  document.getElementById('f-ticket').textContent = money(ticket);
+
+  // barra de cobranza
+  const pct = totalAll ? Math.round(totalConf/totalAll*100) : 0;
+  document.getElementById('f-bar').style.width = pct+'%';
+  document.getElementById('f-cobro-pct').textContent = pct+'% cobrado';
+  document.getElementById('f-leg-conf').textContent = money(totalConf);
+  document.getElementById('f-leg-pend').textContent = money(totalPend);
+
+  // por sede
+  const sedes = {};
+  rows.forEach(r=>{
+    const k = r.sede || '—';
+    if(!sedes[k]) sedes[k]={n:0,conf:0,pend:0,total:0};
+    sedes[k].n++; sedes[k].total += (+r.total||0);
+    if (r.estado_pago==='confirmado') sedes[k].conf += (+r.total||0); else sedes[k].pend += (+r.total||0);
+  });
+  document.getElementById('f-sede-body').innerHTML = Object.keys(sedes).length
+    ? Object.entries(sedes).map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.n}</td><td class="vg">${money(v.conf)}</td><td class="vo">${money(v.pend)}</td><td class="v">${money(v.total)}</td></tr>`).join('')
+    : '<tr><td colspan="5" class="meta">Sin datos.</td></tr>';
+
+  // por taller (cuenta apariciones; paquete = todos)
+  const tcount = {}; TALLER_KEYS.forEach(t=>tcount[t]=0);
+  rows.forEach(r=>{
+    const isPkg = (r.package===true || /paquete/i.test(r.talleres||''));
+    if (isPkg){ TALLER_KEYS.forEach(t=>tcount[t]++); return; }
+    const txt = (r.talleres||'').toLowerCase();
+    TALLER_KEYS.forEach(t=>{ if (txt.includes(t.toLowerCase().slice(0,5))) tcount[t]++; });
+  });
+  const maxT = Math.max(1, ...Object.values(tcount));
+  document.getElementById('f-taller-body').innerHTML = TALLER_KEYS.map(t=>{
+    const c = tcount[t]; const p = rows.length?Math.round(c/rows.length*100):0;
+    return `<tr><td>${t}</td><td>${c}<div class="minibar"><i style="width:${c/maxT*100}%"></i></div></td><td class="meta">${p}%</td></tr>`;
+  }).join('');
+
+  // por método de pago
+  const met = {};
+  rows.forEach(r=>{ const k=(r.metodo_pago||'—'); if(!met[k]) met[k]={n:0,m:0}; met[k].n++; met[k].m+=(+r.total||0); });
+  const metLabel = {transfer:'Transferencia / Depósito', payphone:'PayPhone', '—':'Sin especificar'};
+  document.getElementById('f-metodo-body').innerHTML = Object.entries(met).length
+    ? Object.entries(met).map(([k,v])=>`<tr><td>${esc(metLabel[k]||k)}</td><td>${v.n}</td><td class="v">${money(v.m)}</td></tr>`).join('')
+    : '<tr><td colspan="3" class="meta">Sin datos.</td></tr>';
+
+  // por código
+  const cod = {};
+  rows.forEach(r=>{ const k=(r.codigo&&r.codigo.trim())?r.codigo.trim().toUpperCase():'(sin código)'; if(!cod[k]) cod[k]={n:0,m:0}; cod[k].n++; cod[k].m+=(+r.total||0); });
+  const codArr = Object.entries(cod).sort((a,b)=>b[1].n-a[1].n);
+  document.getElementById('f-codigo-body').innerHTML = codArr.length
+    ? codArr.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.n}</td><td class="v">${money(v.m)}</td></tr>`).join('')
+    : '<tr><td colspan="3" class="meta">Sin datos.</td></tr>';
+}
+
+function fmtDate(s){ if(!s) return '—'; const d=new Date(s); return d.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}); }
+function esc(s){ return (s==null?'':String(s)).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function renderTable(){
+  const q = document.getElementById('search').value.toLowerCase().trim();
+  const fSede = document.getElementById('filterSede').value;
+  const fStat = document.getElementById('filterStatus').value;
+  let list = rows.filter(r=>{
+    const blob = `${r.nombres} ${r.apellidos} ${r.email} ${r.ciudad} ${r.universidad} ${r.telefono} ${r.codigo}`.toLowerCase();
+    if (q && !blob.includes(q)) return false;
+    if (fSede && r.sede !== fSede) return false;
+    if (fStat && r.estado_pago !== fStat) return false;
+    return true;
+  });
+  const tb = document.getElementById('tbody');
+  if (list.length === 0){
+    tb.innerHTML = '<tr><td colspan="9"><div class="empty"><div class="big">📭</div>No hay inscripciones que coincidan.</div></td></tr>';
+    return;
+  }
+  tb.innerHTML = list.map(r=>{
+    const isPkg = (r.package === true || /paquete/i.test(r.talleres||''));
+    const tallerCell = isPkg ? '<span class="pill pill-pkg">Paquete completo</span>' : esc(r.talleres||'—');
+    const stClass = r.estado_pago==='confirmado' ? 'st-conf' : 'st-pend';
+    const stLabel = r.estado_pago==='confirmado' ? 'Confirmado' : 'Pendiente';
+    const comp = r.comprobante_url ? `<a class="iconbtn" href="${esc(r.comprobante_url)}" target="_blank" title="Ver comprobante">📎</a>` : '<span class="meta">—</span>';
+    return `<tr>
+      <td><div class="nm">${esc(r.nombres)} ${esc(r.apellidos)}</div><div class="meta">${esc(r.email)} · ${esc(r.telefono)}</div><div class="meta">${esc(r.ciudad)} · ${esc(r.universidad)}</div></td>
+      <td><span class="pill pill-sede">${esc(r.sede||'—')}</span><div class="meta" style="margin-top:.3rem;">${esc(r.fecha||'')}</div></td>
+      <td style="max-width:200px;">${tallerCell}</td>
+      <td>${r.codigo ? esc(r.codigo) : '<span class="meta">—</span>'}</td>
+      <td style="font-weight:800;color:var(--teal);">$${esc(r.total||0)}</td>
+      <td><span class="status ${stClass}" onclick="toggleStatus(${r.id})"><span class="d"></span>${stLabel}</span></td>
+      <td>${comp}</td>
+      <td class="meta">${fmtDate(r.fecha_registro)}</td>
+      <td><div class="row-actions">
+        <button class="iconbtn" title="Editar" onclick="openEdit(${r.id})">✏️</button>
+        <button class="iconbtn del" title="Eliminar" onclick="delRow(${r.id})">🗑️</button>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ---------- TOGGLE PAGO ----------
+async function toggleStatus(id){
+  const r = rows.find(x=>x.id===id); if(!r) return;
+  const nuevo = r.estado_pago==='confirmado' ? 'pendiente' : 'confirmado';
+  const { error } = await SB.from(CONFIG.SUPABASE_TABLE).update({ estado_pago: nuevo }).eq('id', id);
+  if (error){ toast('No se pudo actualizar: '+error.message, true); return; }
+  r.estado_pago = nuevo; renderStats(); renderTable();
+  toast(nuevo==='confirmado' ? '✅ Pago confirmado' : '⏳ Marcado como pendiente');
+}
+
+// ---------- EDIT ----------
+function openEdit(id){
+  const r = rows.find(x=>x.id===id); if(!r) return;
+  currentEdit = id;
+  document.getElementById('editId').textContent = 'ID #'+id;
+  const set=(k,v)=>document.getElementById(k).value = v==null?'':v;
+  set('e-nombres',r.nombres); set('e-apellidos',r.apellidos); set('e-ciudad',r.ciudad);
+  set('e-universidad',r.universidad); set('e-email',r.email); set('e-telefono',r.telefono);
+  set('e-sede',r.sede||'Riobamba'); set('e-total',r.total); set('e-talleres',r.talleres);
+  set('e-codigo',r.codigo); set('e-estado',r.estado_pago||'pendiente');
+  const comp = document.getElementById('e-comp');
+  if (r.comprobante_url){
+    const isImg = /\.(png|jpe?g|webp|gif)(\?|$)/i.test(r.comprobante_url);
+    comp.innerHTML = (isImg ? `<img src="${esc(r.comprobante_url)}" alt="comprobante">` : '📄 Documento adjunto') +
+      `<br><a href="${esc(r.comprobante_url)}" target="_blank">Abrir comprobante ↗</a>`;
+    document.getElementById('e-comp-wrap').style.display='block';
+  } else { document.getElementById('e-comp-wrap').style.display='none'; }
+  document.getElementById('editModal').classList.add('show');
+}
+function closeEdit(){ document.getElementById('editModal').classList.remove('show'); currentEdit=null; }
+
+async function saveEdit(){
+  if (currentEdit==null) return;
+  const btn=document.getElementById('saveEditBtn'); btn.disabled=true; btn.textContent='Guardando…';
+  const g=k=>document.getElementById(k).value;
+  const patch = {
+    nombres:g('e-nombres'), apellidos:g('e-apellidos'), ciudad:g('e-ciudad'),
+    universidad:g('e-universidad'), email:g('e-email'), telefono:g('e-telefono'),
+    sede:g('e-sede'), total:+g('e-total')||0, talleres:g('e-talleres'),
+    codigo:g('e-codigo'), estado_pago:g('e-estado')
+  };
+  const { error } = await SB.from(CONFIG.SUPABASE_TABLE).update(patch).eq('id', currentEdit);
+  btn.disabled=false; btn.textContent='Guardar cambios';
+  if (error){ toast('Error al guardar: '+error.message, true); return; }
+  const r = rows.find(x=>x.id===currentEdit); Object.assign(r, patch);
+  renderStats(); renderTable(); closeEdit(); toast('✅ Cambios guardados');
+}
+
+// ---------- DELETE ----------
+async function delRow(id){
+  const r = rows.find(x=>x.id===id);
+  if (!confirm(`¿Eliminar la inscripción de ${r.nombres} ${r.apellidos}? Esta acción no se puede deshacer.`)) return;
+  const { error } = await SB.from(CONFIG.SUPABASE_TABLE).delete().eq('id', id);
+  if (error){ toast('No se pudo eliminar: '+error.message, true); return; }
+  rows = rows.filter(x=>x.id!==id); renderStats(); renderTable(); toast('🗑️ Inscripción eliminada');
+}
+
+// ---------- EXPORT CSV ----------
+function exportCSV(){
+  if (!rows.length){ toast('No hay datos para exportar', true); return; }
+  const cols = ['nombres','apellidos','cedula','ciudad','universidad','email','telefono','sede','fecha','talleres','codigo','total','estado_pago','metodo_pago','comprobante_url','fecha_registro'];
+  const head = cols.join(',');
+  const body = rows.map(r=>cols.map(c=>{
+    let v = r[c]==null?'':String(r[c]).replace(/"/g,'""');
+    return `"${v}"`;
+  }).join(',')).join('\n');
+  const blob = new Blob(['\ufeff'+head+'\n'+body], {type:'text/csv;charset=utf-8;'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `inscripciones_survival_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click(); toast('⬇ Excel exportado');
+}
+
+// ---------- TOAST ----------
+let tt;
+function toast(m, err){ const t=document.getElementById('toast'); t.textContent=m; t.classList.toggle('err',!!err); t.classList.add('show'); clearTimeout(tt); tt=setTimeout(()=>t.classList.remove('show'),3000); }
+
+// enter para login
+document.getElementById('adminPass').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+// cerrar modal al click fuera
+document.getElementById('editModal').addEventListener('click',e=>{ if(e.target.id==='editModal') closeEdit(); });
+
+init();
+</script>
+</body>
+</html>
