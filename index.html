@@ -1,0 +1,1396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MEDUCATORS — Survival Weekend | De la teoría a la acción</title>
+<meta name="description" content="Survival Weekend de MEDUCATORS: 4 talleres clínicos prácticos (Suturas, EKG, Gasometría, Venoclisis), semana teórica virtual + práctica presencial. Riobamba, Quito y Loja — Junio 2026.">
+<meta property="og:title" content="MEDUCATORS — Survival Weekend">
+<meta property="og:description" content="De la teoría a la acción. 4 talleres clínicos · 2 días intensivos · certificación incluida.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #00E5C4;
+    --teal-dim: #00BFA5;
+    --orange: #F5A623;
+    --orange-soft: #FFB838;
+    --red: #FF3B5C;
+    --navy: #040D1A;
+    --navy2: #071527;
+    --navy3: #0C1F3A;
+    --card: #0D1F38;
+    --card2: #0F243F;
+    --border: rgba(0,229,196,0.15);
+    --border-soft: rgba(255,255,255,0.08);
+    --text: #E8F4F1;
+    --muted: rgba(232,244,241,0.55);
+    --white: #ffffff;
+    --font-display: 'Bebas Neue', sans-serif;
+    --font-body: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--navy);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 16px;
+    line-height: 1.65;
+    overflow-x: hidden;
+  }
+
+  ::selection { background: var(--teal); color: var(--navy); }
+
+  /* ——— NAV ——— */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 1.75rem; height: 64px;
+    background: rgba(4,13,26,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--font-display); font-size: 1.55rem;
+    letter-spacing: 0.04em; color: var(--white); display:flex; align-items:baseline; gap:0.18em;
+  }
+  .nav-logo b { color: var(--teal); font-weight: 400; }
+  .nav-links { display: flex; gap: 1.6rem; list-style: none; align-items:center; }
+  .nav-links a {
+    text-decoration: none; font-size: 0.74rem; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--muted); transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--teal); }
+  .nav-cta {
+    background: var(--teal); color: var(--navy) !important;
+    padding: 0.55rem 1.25rem; border-radius: 5px; font-weight: 800 !important;
+  }
+  .nav-toggle { display:none; background:none; border:none; color:var(--text); font-size:1.4rem; cursor:pointer; }
+
+  /* ——— HERO ——— */
+  .hero {
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; text-align: center;
+    padding: 8rem 1.5rem 4rem; position: relative; overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,196,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,196,0.04) 1px, transparent 1px);
+    background-size: 50px 50px; z-index: 0;
+    -webkit-mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+    mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+  }
+  .hero-glow {
+    position: absolute; width: 750px; height: 750px; border-radius: 50%;
+    background: radial-gradient(circle, rgba(0,229,196,0.1) 0%, transparent 70%);
+    top: 42%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; z-index: 0;
+  }
+  .hero-glow.orange {
+    background: radial-gradient(circle, rgba(245,166,35,0.06) 0%, transparent 70%);
+    width:500px;height:500px; top:75%; left:25%;
+  }
+  .hero-tag {
+    display: inline-flex; align-items:center; gap:0.5rem;
+    background: rgba(0,229,196,0.12); border: 0.5px solid var(--teal); color: var(--teal);
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 0.45rem 1.2rem; border-radius: 40px; margin-bottom: 2rem;
+    position: relative; z-index: 1; animation: fadeUp 0.6s ease both;
+  }
+  .hero-tag .pulse { width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 0 0 rgba(0,229,196,0.7);animation:pulse 2s infinite; }
+  @keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(0,229,196,0.6);} 70%{box-shadow:0 0 0 8px rgba(0,229,196,0);} 100%{box-shadow:0 0 0 0 rgba(0,229,196,0);} }
+  .hero h1 {
+    font-family: var(--font-display); font-size: clamp(3.5rem, 11vw, 9rem);
+    line-height: 0.88; letter-spacing: 0.02em; color: var(--white);
+    position: relative; z-index: 1; animation: fadeUp 0.7s 0.1s ease both;
+  }
+  .hero h1 .accent { color: var(--teal); }
+  .hero h1 .block { display: block; }
+  .hero-sub {
+    margin-top: 1.75rem; font-size: 1.5rem; font-weight: 600; color: var(--text);
+    position: relative; z-index: 1; animation: fadeUp 0.7s 0.2s ease both; letter-spacing:0.01em;
+  }
+  .hero-sub .pill { color:var(--orange); }
+  .hero-desc {
+    margin-top: 1rem; font-size: 1.02rem; color: var(--muted); max-width: 600px;
+    position: relative; z-index: 1; animation: fadeUp 0.7s 0.25s ease both;
+  }
+  .hero-actions {
+    margin-top: 2.5rem; display: flex; gap: 1rem; align-items: center; justify-content: center;
+    flex-wrap: wrap; position: relative; z-index: 1; animation: fadeUp 0.7s 0.3s ease both;
+  }
+  .btn-primary {
+    background: var(--teal); color: var(--navy); font-family: var(--font-body);
+    font-weight: 800; font-size: 0.92rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.95rem 2.2rem; border-radius: 6px; border: none; cursor: pointer;
+    text-decoration: none; display:inline-block; transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(0,229,196,0.32); }
+  .btn-orange { background: var(--orange); }
+  .btn-orange:hover { box-shadow: 0 10px 34px rgba(245,166,35,0.32); }
+  .btn-outline {
+    background: transparent; color: var(--text); font-family: var(--font-body);
+    font-weight: 600; font-size: 0.92rem; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.95rem 2.2rem; border-radius: 6px; border: 0.5px solid rgba(232,244,241,0.3);
+    cursor: pointer; text-decoration: none; display:inline-block; transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-outline:hover { border-color: var(--teal); color: var(--teal); }
+  .hero-stats {
+    margin-top: 3.5rem; display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
+    position: relative; z-index: 1; animation: fadeUp 0.7s 0.4s ease both;
+  }
+  .stat { text-align: center; }
+  .stat-num { font-family: var(--font-display); font-size: 2.8rem; color: var(--teal); line-height: 1; }
+  .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; margin-top: 0.25rem; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ——— SECTION BASE ——— */
+  section { padding: 6rem 1.5rem; }
+  .container { max-width: 1120px; margin: 0 auto; }
+  .section-tag { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; color: var(--teal); margin-bottom: 0.75rem; }
+  .section-title { font-family: var(--font-display); font-size: clamp(2.5rem, 6vw, 4.2rem); color: var(--white); line-height: 1; letter-spacing: 0.02em; }
+  .section-title .accent { color: var(--teal); }
+  .section-intro { margin-top: 1rem; font-size: 1.05rem; color: var(--muted); max-width: 620px; line-height: 1.75; }
+  .divider { width: 48px; height: 3px; background: var(--teal); border-radius: 2px; margin: 1.5rem 0; }
+
+  /* ——— ABOUT ——— */
+  .about { background: var(--navy2); }
+  .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center; margin-top: 3rem; }
+  .about-visual { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .about-card { background: var(--card); border: 0.5px solid var(--border); border-radius: 10px; padding: 1.6rem; text-align: center; }
+  .about-card:first-child { grid-column: 1 / -1; }
+  .about-card-icon { font-size: 1.7rem; margin-bottom: 0.5rem; display: block; }
+  .about-card-num { font-family: var(--font-display); font-size: 2.4rem; color: var(--teal); line-height:1; }
+  .about-card p { font-size: 0.76rem; color: var(--muted); margin-top: 0.35rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+  .about-points { list-style: none; display: flex; flex-direction: column; gap: 1rem; margin-top: 1.5rem; }
+  .about-points li { display: flex; align-items: flex-start; gap: 0.75rem; font-size: 0.95rem; color: var(--muted); }
+  .about-points li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--teal); flex-shrink: 0; margin-top: 0.55rem; }
+  .about-points li strong { color: var(--text); }
+
+  /* ——— WORKSHOPS ——— */
+  .workshops-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 3rem; }
+  .workshop-card { background: var(--card); border: 0.5px solid var(--border); border-radius: 14px; padding: 2rem; position: relative; overflow: hidden; transition: transform 0.2s, border-color 0.2s; }
+  .workshop-card:hover { transform: translateY(-4px); border-color: var(--teal); }
+  .workshop-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--accent, var(--teal)); }
+  .workshop-number { font-family: var(--font-display); font-size: 5rem; line-height: 1; color: rgba(0,229,196,0.06); position: absolute; top: 1rem; right: 1.5rem; }
+  .workshop-icon { width: 50px; height: 50px; border-radius: 10px; background: var(--accent-soft, rgba(0,229,196,0.12)); display: flex; align-items: center; justify-content: center; font-size: 1.5rem; margin-bottom: 1.25rem; }
+  .workshop-name { font-family: var(--font-display); font-size: 1.7rem; color: var(--white); letter-spacing: 0.04em; margin-bottom: 0.5rem; }
+  .workshop-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 1.1rem; }
+  .ws-cols { display:grid; grid-template-columns:1fr 1fr; gap:1.1rem; }
+  .ws-col h5 { font-size:0.66rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--accent, var(--teal)); margin-bottom:0.6rem; }
+  .workshop-topics { list-style: none; display: flex; flex-direction: column; gap: 0.45rem; }
+  .workshop-topics li { font-size: 0.8rem; color: var(--muted); display: flex; align-items: flex-start; gap: 0.5rem; line-height:1.45; }
+  .workshop-topics li span.dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent, var(--teal)); flex-shrink: 0; margin-top: 0.52em; }
+  .workshop-price-row { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 0.5px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .workshop-price { display:flex; align-items:baseline; gap:0.5rem; }
+  .workshop-price .now { font-family: var(--font-display); font-size: 2rem; color: var(--accent, var(--teal)); line-height:1; }
+  .workshop-price .pvp { font-size: 0.8rem; color: var(--muted); text-decoration: line-through; }
+  .workshop-tagline { font-size: 0.75rem; color: var(--muted); text-align: right; max-width: 45%; line-height:1.4; }
+
+  /* ——— SCHEDULE / SEDES ——— */
+  .schedule { background: var(--navy2); }
+  .sedes-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:1.25rem; margin-top:3rem; }
+  .sede-card { background:var(--card); border:0.5px solid var(--border); border-radius:14px; padding:2rem 1.75rem; position:relative; overflow:hidden; transition:transform .2s, border-color .2s; }
+  .sede-card:hover { transform:translateY(-4px); border-color:var(--sc, var(--teal)); }
+  .sede-pin { font-size:2rem; line-height:1; margin-bottom:0.75rem; color:var(--sc,var(--teal)); }
+  .sede-name { font-family:var(--font-display); font-size:2.2rem; letter-spacing:0.04em; color:var(--white); line-height:1; }
+  .sede-date { margin-top:0.75rem; font-family:var(--font-display); font-size:2.4rem; color:var(--sc,var(--teal)); line-height:0.9; letter-spacing:0.02em; }
+  .sede-month { font-size:0.78rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-top:0.2rem; }
+  .sede-tag { display:inline-block; margin-top:1.25rem; font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--sc,var(--teal)); border:0.5px solid var(--sc,var(--teal)); border-radius:30px; padding:0.3rem 0.85rem; }
+
+  /* ——— PACKAGE / OFERTA ——— */
+  .offer { position:relative; }
+  .offer-card { margin-top:3rem; background:linear-gradient(135deg, var(--card), var(--card2)); border:2px solid var(--orange); border-radius:20px; padding:2.75rem; position:relative; overflow:hidden; }
+  .offer-ribbon { position:absolute; top:1.4rem; right:-3rem; background:var(--orange); color:var(--navy); font-size:0.65rem; font-weight:800; letter-spacing:0.15em; padding:0.35rem 3.5rem; transform:rotate(35deg); }
+  .offer-top { display:flex; align-items:center; gap:2.5rem; flex-wrap:wrap; }
+  .offer-price { display:flex; align-items:baseline; gap:1rem; }
+  .offer-price .reg { font-family:var(--font-display); font-size:2.6rem; color:var(--muted); text-decoration:line-through; text-decoration-color:var(--red); }
+  .offer-price .now { font-family:var(--font-display); font-size:5.5rem; color:var(--orange); line-height:0.85; }
+  .offer-price .now small { display:block; font-family:var(--font-body); font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+  .offer-headline { font-family:var(--font-display); font-size:1.8rem; letter-spacing:0.03em; color:var(--white); }
+  .offer-headline .accent { color:var(--teal); }
+  .offer-feats { display:grid; grid-template-columns:repeat(3,1fr); gap:0.85rem; margin-top:2rem; }
+  .offer-feat { background:rgba(0,229,196,0.05); border:0.5px solid var(--border); border-radius:10px; padding:1rem 1.1rem; display:flex; align-items:center; gap:0.7rem; font-size:0.82rem; }
+  .offer-feat .ico { font-size:1.2rem; }
+  .offer-feat strong { color:var(--text); }
+
+  /* ——— DISCOUNTS ——— */
+  .disc { background: var(--navy2); }
+  .disc-steps { display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; margin-top:3rem; }
+  .disc-step { background:var(--card); border:0.5px solid var(--border); border-radius:14px; padding:2rem; }
+  .disc-step .num { width:34px;height:34px;border-radius:50%;background:var(--orange);color:var(--navy);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:0.95rem;margin-bottom:1rem; }
+  .disc-step h4 { font-size:1.1rem; color:var(--white); margin-bottom:0.5rem; }
+  .disc-step p { font-size:0.88rem; color:var(--muted); }
+  .code-box { margin-top:1.25rem; border:1.5px dashed var(--teal); border-radius:10px; padding:1.25rem; text-align:center; }
+  .code-box .code { font-family:var(--font-display); font-size:2.4rem; color:var(--teal); letter-spacing:0.1em; }
+  .code-box small { display:block; font-size:0.66rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted); margin-top:0.25rem; }
+  .allies { display:flex; flex-wrap:wrap; gap:0.6rem; margin-top:1.25rem; }
+  .ally { background:rgba(255,255,255,0.04); border:0.5px solid var(--border-soft); border-radius:30px; padding:0.45rem 0.95rem; font-size:0.76rem; font-weight:600; color:var(--text); }
+  .disc-note { font-size:0.78rem; color:var(--muted); margin-top:1.5rem; text-align:center; font-style:italic; }
+
+  /* ——— REGISTRATION WIZARD ——— */
+  .register { background: var(--navy); position:relative; }
+  .register .container { max-width: 760px; }
+  .wizard { background:var(--card); border:0.5px solid var(--border); border-radius:20px; padding:2.5rem; margin-top:2.5rem; box-shadow:0 30px 80px rgba(0,0,0,0.4); }
+  .steps-bar { display:flex; align-items:center; gap:0; margin-bottom:2rem; }
+  .step-dot { flex:1; display:flex; flex-direction:column; align-items:center; gap:0.4rem; position:relative; }
+  .step-dot .circle { width:32px;height:32px;border-radius:50%;background:var(--navy3);border:1.5px solid var(--border-soft);display:flex;align-items:center;justify-content:center;font-size:0.8rem;font-weight:700;color:var(--muted);transition:all .25s;z-index:1; }
+  .step-dot .lbl { font-size:0.6rem; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); font-weight:600; text-align:center; }
+  .step-dot.active .circle { background:var(--teal); border-color:var(--teal); color:var(--navy); }
+  .step-dot.done .circle { background:rgba(0,229,196,0.18); border-color:var(--teal); color:var(--teal); }
+  .step-dot.active .lbl, .step-dot.done .lbl { color:var(--text); }
+  .step-dot::after { content:''; position:absolute; top:16px; left:50%; width:100%; height:1.5px; background:var(--border-soft); z-index:0; }
+  .step-dot:last-child::after { display:none; }
+  .step-dot.done::after { background:var(--teal); }
+
+  .wstep { display:none; animation: stepIn 0.35s ease both; }
+  .wstep.active { display:block; }
+  @keyframes stepIn { from{opacity:0; transform:translateX(14px);} to{opacity:1; transform:translateX(0);} }
+  .wstep h3 { font-family:var(--font-display); font-size:1.9rem; letter-spacing:0.03em; color:var(--white); margin-bottom:0.3rem; }
+  .wstep .sub { font-size:0.88rem; color:var(--muted); margin-bottom:1.75rem; }
+
+  .field { margin-bottom:1.25rem; }
+  .field label { display:block; font-size:0.74rem; font-weight:700; letter-spacing:0.06em; text-transform:uppercase; color:var(--text); margin-bottom:0.5rem; }
+  .field label .opt { color:var(--muted); font-weight:500; text-transform:none; letter-spacing:0; }
+  .field input, .field select, .field textarea {
+    width:100%; background:var(--navy3); border:1px solid var(--border-soft); border-radius:9px;
+    padding:0.85rem 1rem; color:var(--text); font-family:var(--font-body); font-size:0.95rem; transition:border-color .2s, box-shadow .2s;
+  }
+  .field input::placeholder, .field textarea::placeholder { color:rgba(232,244,241,0.3); }
+  .field input:focus, .field select:focus, .field textarea:focus { outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(0,229,196,0.12); }
+  .field select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2300E5C4' d='M6 8L0 0h12z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 1rem center; padding-right:2.5rem; cursor:pointer; }
+  .field-row { display:grid; grid-template-columns:1fr 1fr; gap:1rem; }
+  .field .err { color:var(--red); font-size:0.74rem; margin-top:0.35rem; display:none; }
+  .field.invalid input, .field.invalid select { border-color:var(--red); }
+  .field.invalid .err { display:block; }
+
+  /* selectable cards (sede + talleres) */
+  .opt-grid { display:flex; flex-direction:column; gap:0.85rem; }
+  .opt-grid.cols { display:grid; grid-template-columns:1fr 1fr; }
+  .opt-card { background:var(--navy3); border:1.5px solid var(--border-soft); border-radius:12px; padding:1.1rem 1.25rem; cursor:pointer; transition:all .18s; display:flex; align-items:center; gap:1rem; position:relative; }
+  .opt-card:hover { border-color:var(--teal); }
+  .opt-card.selected { border-color:var(--teal); background:rgba(0,229,196,0.07); }
+  .opt-card .check { width:22px;height:22px;border-radius:6px;border:1.5px solid var(--border-soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .18s; font-size:0.8rem; }
+  .opt-card.radio .check { border-radius:50%; }
+  .opt-card.selected .check { background:var(--teal); border-color:var(--teal); color:var(--navy); font-weight:800; }
+  .opt-card .info { flex:1; }
+  .opt-card .info .t { font-weight:700; color:var(--text); font-size:0.98rem; }
+  .opt-card .info .d { font-size:0.78rem; color:var(--muted); margin-top:0.1rem; }
+  .opt-card .pr { text-align:right; flex-shrink:0; }
+  .opt-card .pr .now { font-family:var(--font-display); font-size:1.5rem; color:var(--teal); line-height:1; }
+  .opt-card .pr .pvp { font-size:0.7rem; color:var(--muted); text-decoration:line-through; }
+  .opt-card.disabled { opacity:0.45; pointer-events:none; }
+
+  .pkg-card { border:1.5px solid var(--orange); background:rgba(245,166,35,0.06); margin-bottom:1.1rem; }
+  .pkg-card.selected { background:rgba(245,166,35,0.12); border-color:var(--orange); }
+  .pkg-card .check { border-radius:8px; }
+  .pkg-card.selected .check { background:var(--orange); border-color:var(--orange); }
+  .pkg-card .pr .now { color:var(--orange); font-size:1.9rem; }
+  .pkg-badge { position:absolute; top:-9px; left:16px; background:var(--orange); color:var(--navy); font-size:0.58rem; font-weight:800; letter-spacing:0.12em; text-transform:uppercase; padding:0.18rem 0.7rem; border-radius:20px; }
+
+  .hint { background:rgba(245,166,35,0.08); border:0.5px solid var(--orange); border-radius:10px; padding:0.85rem 1rem; font-size:0.82rem; color:var(--text); margin-top:1rem; display:none; align-items:center; justify-content:space-between; gap:1rem; }
+  .hint.show { display:flex; }
+  .hint button { background:var(--orange); color:var(--navy); border:none; border-radius:6px; padding:0.45rem 0.85rem; font-weight:800; font-size:0.72rem; cursor:pointer; white-space:nowrap; text-transform:uppercase; letter-spacing:0.04em; }
+
+  /* summary */
+  .summary { background:var(--navy3); border:0.5px solid var(--border); border-radius:12px; padding:1.25rem 1.4rem; margin-top:1.5rem; }
+  .summary h4 { font-size:0.7rem; font-weight:700; letter-spacing:0.12em; text-transform:uppercase; color:var(--teal); margin-bottom:0.85rem; }
+  .summary-line { display:flex; justify-content:space-between; font-size:0.88rem; color:var(--muted); padding:0.3rem 0; }
+  .summary-line span:last-child { color:var(--text); font-weight:600; }
+  .summary-total { display:flex; justify-content:space-between; align-items:baseline; margin-top:0.85rem; padding-top:0.85rem; border-top:0.5px solid var(--border); }
+  .summary-total .l { font-size:0.78rem; text-transform:uppercase; letter-spacing:0.1em; color:var(--text); font-weight:700; }
+  .summary-total .v { font-family:var(--font-display); font-size:2.4rem; color:var(--teal); line-height:1; }
+  .summary-empty { font-size:0.85rem; color:var(--muted); font-style:italic; }
+  .save-tag { font-size:0.74rem; color:var(--orange); font-weight:700; }
+
+  /* payment */
+  .bank-card { background:var(--navy3); border:0.5px solid var(--border); border-radius:12px; padding:1.5rem; }
+  .bank-card .bhead { display:flex; align-items:center; gap:0.7rem; margin-bottom:1.1rem; }
+  .bank-card .bhead .logo { font-family:var(--font-display); font-size:1.1rem; letter-spacing:0.05em; color:var(--orange); background:rgba(245,166,35,0.12); border-radius:6px; padding:0.35rem 0.7rem; }
+  .bank-row { display:flex; justify-content:space-between; align-items:center; padding:0.55rem 0; border-bottom:0.5px solid var(--border-soft); font-size:0.9rem; }
+  .bank-row:last-child { border-bottom:none; }
+  .bank-row .k { color:var(--muted); font-size:0.78rem; text-transform:uppercase; letter-spacing:0.06em; }
+  .bank-row .v { color:var(--text); font-weight:700; font-family:var(--font-body); }
+  .copy-btn { background:rgba(0,229,196,0.12); border:0.5px solid var(--teal); color:var(--teal); border-radius:6px; padding:0.25rem 0.6rem; font-size:0.68rem; font-weight:700; cursor:pointer; margin-left:0.6rem; text-transform:uppercase; letter-spacing:0.04em; transition:all .15s; }
+  .copy-btn:hover { background:var(--teal); color:var(--navy); }
+
+  .pay-amount { text-align:center; background:linear-gradient(135deg, rgba(0,229,196,0.1), rgba(245,166,35,0.06)); border:0.5px solid var(--teal); border-radius:12px; padding:1.5rem; margin-bottom:1.5rem; }
+  .pay-amount .l { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+  .pay-amount .v { font-family:var(--font-display); font-size:3.5rem; color:var(--teal); line-height:1; }
+
+  /* file upload */
+  .upload { border:1.5px dashed var(--border); border-radius:12px; padding:2rem 1.5rem; text-align:center; cursor:pointer; transition:all .2s; background:var(--navy3); }
+  .upload:hover, .upload.drag { border-color:var(--teal); background:rgba(0,229,196,0.05); }
+  .upload .ico { font-size:2rem; }
+  .upload .t { font-weight:700; color:var(--text); margin-top:0.5rem; font-size:0.92rem; }
+  .upload .d { font-size:0.78rem; color:var(--muted); margin-top:0.25rem; }
+  .upload-preview { display:none; margin-top:1rem; align-items:center; gap:0.85rem; background:rgba(0,229,196,0.07); border:0.5px solid var(--teal); border-radius:10px; padding:0.85rem 1rem; }
+  .upload-preview.show { display:flex; }
+  .upload-preview .fico { font-size:1.4rem; }
+  .upload-preview .fname { flex:1; font-size:0.85rem; color:var(--text); font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .upload-preview .remove { background:none; border:none; color:var(--red); cursor:pointer; font-size:1.1rem; font-weight:700; }
+
+  .pay-tabs { display:flex; gap:0.6rem; margin-bottom:1.5rem; }
+  .pay-tab { flex:1; text-align:center; padding:0.8rem; border-radius:10px; border:1.5px solid var(--border-soft); background:var(--navy3); cursor:pointer; font-weight:700; font-size:0.82rem; color:var(--muted); transition:all .18s; }
+  .pay-tab.active { border-color:var(--teal); background:rgba(0,229,196,0.08); color:var(--teal); }
+  .pay-panel { display:none; }
+  .pay-panel.active { display:block; }
+
+  .consent { display:flex; align-items:flex-start; gap:0.7rem; margin-top:1.5rem; font-size:0.82rem; color:var(--muted); }
+  .consent input { margin-top:0.25rem; width:18px; height:18px; accent-color:var(--teal); flex-shrink:0; }
+
+  .wnav { display:flex; justify-content:space-between; gap:1rem; margin-top:2rem; }
+  .wnav .spacer { flex:1; }
+  .btn-ghost { background:transparent; border:0.5px solid var(--border-soft); color:var(--muted); padding:0.85rem 1.6rem; border-radius:6px; font-weight:700; font-size:0.85rem; cursor:pointer; text-transform:uppercase; letter-spacing:0.04em; transition:all .18s; }
+  .btn-ghost:hover { border-color:var(--text); color:var(--text); }
+
+  .success { text-align:center; padding:1rem; display:none; }
+  .success.show { display:block; animation: stepIn .4s ease both; }
+  .success .big { width:80px;height:80px;border-radius:50%;background:rgba(0,229,196,0.15);border:2px solid var(--teal);display:flex;align-items:center;justify-content:center;font-size:2.5rem;margin:0 auto 1.5rem; }
+  .success h3 { font-family:var(--font-display); font-size:2.4rem; color:var(--white); letter-spacing:0.03em; }
+  .success p { color:var(--muted); max-width:440px; margin:0.75rem auto 0; font-size:0.95rem; }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(120%); background:var(--card); border:0.5px solid var(--teal); color:var(--text); padding:0.85rem 1.4rem; border-radius:10px; font-size:0.85rem; font-weight:600; z-index:200; transition:transform .3s; box-shadow:0 10px 40px rgba(0,0,0,0.5); }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+
+  /* FAQ */
+  .faq { background: var(--navy2); }
+  .faq-list { margin-top:2.5rem; display:flex; flex-direction:column; gap:0.85rem; }
+  .faq-item { background:var(--card); border:0.5px solid var(--border); border-radius:12px; overflow:hidden; }
+  .faq-q { padding:1.2rem 1.5rem; cursor:pointer; display:flex; justify-content:space-between; align-items:center; font-weight:700; color:var(--text); font-size:0.95rem; }
+  .faq-q .plus { color:var(--teal); font-size:1.3rem; transition:transform .25s; }
+  .faq-item.open .faq-q .plus { transform:rotate(45deg); }
+  .faq-a { max-height:0; overflow:hidden; transition:max-height .3s ease, padding .3s ease; padding:0 1.5rem; color:var(--muted); font-size:0.9rem; line-height:1.7; }
+  .faq-item.open .faq-a { max-height:300px; padding:0 1.5rem 1.3rem; }
+
+  /* WhatsApp float */
+  .wa-float { position:fixed; bottom:24px; right:24px; z-index:150; background:#25D366; color:#fff; width:58px;height:58px;border-radius:50%; display:flex;align-items:center;justify-content:center; font-size:1.6rem; text-decoration:none; box-shadow:0 8px 30px rgba(37,211,102,0.4); transition:transform .2s; }
+  .wa-float:hover { transform:scale(1.08); }
+
+  /* CTA */
+  .cta-section { text-align: center; padding: 7rem 1.5rem; position: relative; overflow: hidden; }
+  .cta-glow { position: absolute; width: 600px; height: 400px; border-radius: 50%; background: radial-gradient(ellipse, rgba(0,229,196,0.08) 0%, transparent 70%); top: 50%; left: 50%; transform: translate(-50%,-50%); pointer-events: none; }
+  .cta-section h2 { font-family: var(--font-display); font-size: clamp(3rem, 8vw, 6rem); color: var(--white); line-height: 0.95; letter-spacing: 0.02em; position: relative; z-index: 1; }
+  .cta-section h2 .line2 { color: var(--teal); }
+  .cta-section p { margin-top: 1.5rem; font-size: 1rem; color: var(--muted); max-width: 480px; margin-left: auto; margin-right: auto; position: relative; z-index: 1; }
+  .cta-actions { margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; position: relative; z-index: 1; }
+
+  /* FOOTER */
+  footer { padding: 2.5rem 1.5rem; text-align: center; border-top: 0.5px solid var(--border); font-size: 0.82rem; color:var(--muted); }
+  footer strong { color: var(--teal); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.revealed { opacity: 1; transform: translateY(0); }
+
+  /* responsive */
+  @media (max-width: 860px) {
+    .nav-links { position:fixed; top:64px; left:0; right:0; background:rgba(4,13,26,0.98); flex-direction:column; gap:0; padding:1rem 1.5rem; border-bottom:0.5px solid var(--border); display:none; }
+    .nav-links.open { display:flex; }
+    .nav-links a { padding:0.85rem 0; width:100%; border-bottom:0.5px solid var(--border-soft); }
+    .nav-cta { text-align:center; margin-top:0.5rem; }
+    .nav-toggle { display:block; }
+    .about-grid { grid-template-columns:1fr; gap:2.5rem; }
+    .workshops-grid { grid-template-columns:1fr; }
+    .sedes-grid { grid-template-columns:1fr; }
+    .offer-feats { grid-template-columns:1fr; }
+    .disc-steps { grid-template-columns:1fr; }
+    .offer-price .now { font-size:4rem; }
+  }
+  @media (max-width: 560px) {
+    section { padding:4.5rem 1.1rem; }
+    .wizard { padding:1.5rem 1.2rem; }
+    .field-row { grid-template-columns:1fr; }
+    .opt-grid.cols { grid-template-columns:1fr; }
+    .ws-cols { grid-template-columns:1fr; }
+    .step-dot .lbl { display:none; }
+    .pay-tabs { flex-direction:column; }
+    .hero-stats { gap:1.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="nav-logo">MED<b>ucators</b></div>
+  <button class="nav-toggle" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+  <ul class="nav-links" id="navlinks">
+    <li><a href="#about">El evento</a></li>
+    <li><a href="#talleres">Talleres</a></li>
+    <li><a href="#sedes">Sedes</a></li>
+    <li><a href="#oferta">Oferta</a></li>
+    <li><a href="#faq">Dudas</a></li>
+    <li><a href="#inscripcion" class="nav-cta">Inscribirme</a></li>
+  </ul>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow orange"></div>
+
+  <div class="hero-tag"><span class="pulse"></span> Cupos limitados por sede · Junio 2026</div>
+  <h1>
+    <span class="block">SURVIVAL</span>
+    <span class="block accent">WEEKEND</span>
+  </h1>
+  <div class="hero-sub">De la teoría a la <span class="pill">acción</span></div>
+  <p class="hero-desc">Semana teórica virtual + 100% práctica presencial. Cuatro talleres clínicos para que dejes de solo leerlo… y empieces a hacerlo.</p>
+
+  <div class="hero-actions">
+    <a href="#inscripcion" class="btn-primary">Inscribirme ahora</a>
+    <a href="#talleres" class="btn-outline">Ver talleres</a>
+  </div>
+
+  <div class="hero-stats">
+    <div class="stat"><div class="stat-num">4</div><div class="stat-label">Talleres clínicos</div></div>
+    <div class="stat"><div class="stat-num">2</div><div class="stat-label">Días intensivos</div></div>
+    <div class="stat"><div class="stat-num">3</div><div class="stat-label">Sedes</div></div>
+    <div class="stat"><div class="stat-num">100%</div><div class="stat-label">Práctica + certificado</div></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT ============ -->
+<section class="about" id="about">
+  <div class="container">
+    <div class="section-tag">Qué es el Survival Weekend</div>
+    <h2 class="section-title">DE LA TEORÍA <span class="accent">A LA ACCIÓN</span></h2>
+    <div class="divider"></div>
+    <div class="about-grid">
+      <div>
+        <p class="section-intro" style="margin-top:0;">El Survival Weekend es la experiencia de MEDUCATORS donde transformas el conocimiento en habilidad real. Primero una <strong style="color:var(--text)">semana teórica virtual</strong> a tu ritmo, y luego un <strong style="color:var(--text)">fin de semana 100% práctico y presencial</strong> con docentes guía, materiales reales y simulación con casos clínicos.</p>
+        <ul class="about-points">
+          <li><strong>Pensado para ti.</strong> Ideal para cualquier estudiante del área de la salud que quiera ganar destreza antes del internado y el rural.</li>
+          <li><strong>Práctica que sirve.</strong> Suturas, EKG, gasometría, venoclisis y toma de muestras: skills que usarás desde tu primer turno.</li>
+          <li><strong>Certificación incluida.</strong> Al completar la evaluación recibes tu certificado oficial de MEDUCATORS.</li>
+          <li><strong>Mismo nivel en cada ciudad.</strong> Tres sedes — Riobamba, Quito y Loja — con la misma experiencia.</li>
+        </ul>
+      </div>
+      <div class="about-visual">
+        <div class="about-card">
+          <span class="about-card-icon">🧠</span>
+          <div class="about-card-num">Semana teórica virtual + práctica presencial</div>
+          <p>El formato</p>
+        </div>
+        <div class="about-card"><div class="about-card-num">4</div><p>Talleres clínicos</p></div>
+        <div class="about-card"><div class="about-card-num">2</div><p>Días intensivos</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TALLERES ============ -->
+<section id="talleres">
+  <div class="container">
+    <div class="section-tag">Elige tu taller</div>
+    <h2 class="section-title">MEJORA TUS <span class="accent">HABILIDADES CLÍNICAS</span></h2>
+    <div class="divider"></div>
+    <p class="section-intro">Cada taller incluye teoría online previa + práctica presencial. Los precios mostrados aplican <strong style="color:var(--text)">con código de ASO o promotor</strong>.</p>
+
+    <div class="workshops-grid">
+      <!-- SUTURAS -->
+      <div class="workshop-card reveal" style="--accent:#E8EDF5;--accent-soft:rgba(255,255,255,0.1);">
+        <div class="workshop-number">01</div>
+        <div class="workshop-icon">🪡</div>
+        <div class="workshop-name">SUTURAS</div>
+        <p class="workshop-desc">Técnicas de sutura y manejo instrumental, con piel sintética y simulación de casos clínicos.</p>
+        <div class="ws-cols">
+          <div class="ws-col">
+            <h5>¿Qué aprenderás?</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Instrumental y asepsia</li>
+              <li><span class="dot"></span>Punto simple, continuo, colchonero, subdérmico y hemostático</li>
+              <li><span class="dot"></span>Infiltración anestésica</li>
+              <li><span class="dot"></span>Manejo de heridas y cierre</li>
+            </ul>
+          </div>
+          <div class="ws-col">
+            <h5>Incluye</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Materiales de práctica</li>
+              <li><span class="dot"></span>Piel sintética</li>
+              <li><span class="dot"></span>Docente guía</li>
+              <li><span class="dot"></span>Simulación con casos clínicos</li>
+            </ul>
+          </div>
+        </div>
+        <div class="workshop-price-row">
+          <div class="workshop-price"><span class="now">$20</span><span class="pvp">$25</span></div>
+          <div class="workshop-tagline">Ideal para cualquier estudiante del área de la salud</div>
+        </div>
+      </div>
+
+      <!-- EKG -->
+      <div class="workshop-card reveal" style="--accent:var(--red);--accent-soft:rgba(255,59,92,0.12);">
+        <div class="workshop-number">02</div>
+        <div class="workshop-icon">🫀</div>
+        <div class="workshop-name">EKG</div>
+        <p class="workshop-desc">Lectura e interpretación básica + avanzada del electrocardiograma, de lo básico a lo avanzado con enfoque clínico.</p>
+        <div class="ws-cols">
+          <div class="ws-col">
+            <h5>¿Qué aprenderás?</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Lectura sistemática</li>
+              <li><span class="dot"></span>Ritmo, frecuencia y eje</li>
+              <li><span class="dot"></span>Bloqueos y arritmias</li>
+              <li><span class="dot"></span>Signos de IAM</li>
+            </ul>
+          </div>
+          <div class="ws-col">
+            <h5>Incluye</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Trazados reales</li>
+              <li><span class="dot"></span>Apoyo teórico virtual</li>
+              <li><span class="dot"></span>Práctica guiada</li>
+              <li><span class="dot"></span>Simulacros + métodos de lectura rápida</li>
+            </ul>
+          </div>
+        </div>
+        <div class="workshop-price-row">
+          <div class="workshop-price"><span class="now">$18</span><span class="pvp">$25</span></div>
+          <div class="workshop-tagline">De lo básico a lo avanzado, garantizando tu aprendizaje</div>
+        </div>
+      </div>
+
+      <!-- GASOMETRÍA -->
+      <div class="workshop-card reveal" style="--accent:var(--orange);--accent-soft:rgba(245,166,35,0.14);">
+        <div class="workshop-number">03</div>
+        <div class="workshop-icon">🩸</div>
+        <div class="workshop-name">GASOMETRÍA</div>
+        <p class="workshop-desc">Punción arterial e interpretación del equilibrio ácido-base. Un skill clave para el internado y el manejo de pacientes críticos.</p>
+        <div class="ws-cols">
+          <div class="ws-col">
+            <h5>¿Qué aprenderás?</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Equilibrio ácido-base</li>
+              <li><span class="dot"></span>Test de Allen</li>
+              <li><span class="dot"></span>Punción arterial</li>
+              <li><span class="dot"></span>Interpretación de resultados</li>
+            </ul>
+          </div>
+          <div class="ws-col">
+            <h5>Incluye</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Casos clínicos</li>
+              <li><span class="dot"></span>Tirillas y material de práctica</li>
+              <li><span class="dot"></span>Apoyo teórico virtual</li>
+              <li><span class="dot"></span>Práctica real + casos clínicos</li>
+            </ul>
+          </div>
+        </div>
+        <div class="workshop-price-row">
+          <div class="workshop-price"><span class="now">$15</span><span class="pvp">$20</span></div>
+          <div class="workshop-tagline">Clave para el internado y pacientes críticos</div>
+        </div>
+      </div>
+
+      <!-- VENOCLISIS -->
+      <div class="workshop-card reveal" style="--accent:var(--teal);--accent-soft:rgba(0,229,196,0.12);">
+        <div class="workshop-number">04</div>
+        <div class="workshop-icon">💉</div>
+        <div class="workshop-name">VENOCLISIS Y MUESTRAS</div>
+        <p class="workshop-desc">Canalización, sistema Vacutainer y toma de muestras. Práctica útil para tu internado y rural.</p>
+        <div class="ws-cols">
+          <div class="ws-col">
+            <h5>¿Qué aprenderás?</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Canalización periférica</li>
+              <li><span class="dot"></span>Venoclisis</li>
+              <li><span class="dot"></span>Sistema Vacutainer</li>
+              <li><span class="dot"></span>Toma de muestras e inyectología IM</li>
+            </ul>
+          </div>
+          <div class="ws-col">
+            <h5>Incluye</h5>
+            <ul class="workshop-topics">
+              <li><span class="dot"></span>Materiales de práctica</li>
+              <li><span class="dot"></span>Demostración guiada</li>
+              <li><span class="dot"></span>Apoyo teórico virtual</li>
+              <li><span class="dot"></span>Casos clínicos prácticos reales</li>
+            </ul>
+          </div>
+        </div>
+        <div class="workshop-price-row">
+          <div class="workshop-price"><span class="now">$15</span><span class="pvp">$20</span></div>
+          <div class="workshop-tagline">Práctica útil para tu internado y rural</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEDES ============ -->
+<section class="schedule" id="sedes">
+  <div class="container">
+    <div class="section-tag">Elige tu sede</div>
+    <h2 class="section-title">TRES CIUDADES, <span class="accent">MISMA EXPERIENCIA</span></h2>
+    <div class="divider"></div>
+    <p class="section-intro">El Survival Weekend llega a tres ciudades en junio. Cupos limitados por sede — asegura tu lugar.</p>
+
+    <div class="sedes-grid">
+      <div class="sede-card reveal" style="--sc:var(--teal);">
+        <div class="sede-pin">📍</div>
+        <div class="sede-name">RIOBAMBA</div>
+        <div class="sede-date">6 Y 7</div>
+        <div class="sede-month">de junio</div>
+        <span class="sede-tag">Cupos limitados</span>
+      </div>
+      <div class="sede-card reveal" style="--sc:var(--orange);">
+        <div class="sede-pin">📍</div>
+        <div class="sede-name">QUITO</div>
+        <div class="sede-date">13 Y 14</div>
+        <div class="sede-month">de junio</div>
+        <span class="sede-tag">Cupos limitados</span>
+      </div>
+      <div class="sede-card reveal" style="--sc:#2D9CDB;">
+        <div class="sede-pin">📍</div>
+        <div class="sede-name">LOJA</div>
+        <div class="sede-date">20 Y 21</div>
+        <div class="sede-month">de junio</div>
+        <span class="sede-tag">Cupos limitados</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OFERTA ESPECIAL ============ -->
+<section class="offer" id="oferta">
+  <div class="container">
+    <div class="section-tag">Oferta especial</div>
+    <h2 class="section-title">PAQUETE <span class="accent">COMPLETO</span></h2>
+    <div class="divider"></div>
+
+    <div class="offer-card reveal">
+      <div class="offer-ribbon">★ MEJOR VALOR</div>
+      <div class="offer-top">
+        <div class="offer-price">
+          <span class="reg">$90</span>
+          <span class="now">$60<small>Ahora · con código</small></span>
+        </div>
+        <div class="offer-headline">LOS 4 TALLERES <span class="accent">EN UNA SOLA EXPERIENCIA</span></div>
+      </div>
+      <div class="offer-feats">
+        <div class="offer-feat"><span class="ico">📅</span><span><strong>4 talleres</strong></span></div>
+        <div class="offer-feat"><span class="ico">💻</span><span><strong>Semana teórica</strong> virtual</span></div>
+        <div class="offer-feat"><span class="ico">🩺</span><span><strong>100% práctica</strong> presencial</span></div>
+        <div class="offer-feat"><span class="ico">📚</span><span><strong>Materiales</strong> incluidos</span></div>
+        <div class="offer-feat"><span class="ico">☕</span><span><strong>Refrigerios</strong></span></div>
+        <div class="offer-feat"><span class="ico">📜</span><span><strong>Certificación</strong> + evaluación</span></div>
+      </div>
+      <div style="margin-top:2rem;text-align:center;">
+        <a href="#inscripcion" class="btn-orange btn-primary" onclick="preselectPackage()">Quiero el paquete completo · Ahorra $30</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DESCUENTOS ============ -->
+<section class="disc" id="descuentos">
+  <div class="container">
+    <div class="section-tag">Aplica tu descuento</div>
+    <h2 class="section-title">¿VIENES POR UNA <span class="accent">ASO O PROMOTOR?</span></h2>
+    <div class="divider"></div>
+    <div class="disc-steps">
+      <div class="disc-step reveal">
+        <div class="num">1</div>
+        <h4>Usa tu código</h4>
+        <p>Si vienes por una asociación aliada o promotor, aplica tu código de descuento al inscribirte para acceder a los precios promocionales.</p>
+        <div class="code-box">
+          <div class="code">ASO</div>
+          <small>Cada ASO o promotor tiene su código</small>
+        </div>
+      </div>
+      <div class="disc-step reveal">
+        <div class="num">2</div>
+        <h4>Tenemos alianza con varias organizaciones</h4>
+        <p>Si tu ASO no está en la lista, ¿qué esperas para contarles de nosotros y acceder a varios beneficios?</p>
+        <div class="allies">
+          <span class="ally">AEMPPI UTE</span>
+          <span class="ally">OIECS PUCE</span>
+          <span class="ally">AEM UCE</span>
+          <span class="ally">AEMPPI UNL</span>
+          <span class="ally">AEMPPI UNACH</span>
+          <span class="ally">ASO Medicina ESPOCH</span>
+          <span class="ally">FEUE UTPL Medicina</span>
+        </div>
+        <p class="disc-note">Descuento sujeto a validación del aliado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ INSCRIPCIÓN (WIZARD) ============ -->
+<section class="register" id="inscripcion">
+  <div class="container">
+    <div class="section-tag">Reserva tu lugar</div>
+    <h2 class="section-title">FORMULARIO DE <span class="accent">INSCRIPCIÓN</span></h2>
+    <div class="divider"></div>
+    <p class="section-intro">Completa estos pasos para asegurar tu cupo. Te tomará menos de 2 minutos.</p>
+
+    <div class="wizard" id="wizard">
+      <!-- step indicator -->
+      <div class="steps-bar">
+        <div class="step-dot active" data-step="1"><div class="circle">1</div><div class="lbl">Datos</div></div>
+        <div class="step-dot" data-step="2"><div class="circle">2</div><div class="lbl">Sede</div></div>
+        <div class="step-dot" data-step="3"><div class="circle">3</div><div class="lbl">Talleres</div></div>
+        <div class="step-dot" data-step="4"><div class="circle">4</div><div class="lbl">Pago</div></div>
+      </div>
+
+      <!-- STEP 1: DATOS -->
+      <div class="wstep active" data-step="1">
+        <h3>Tus datos</h3>
+        <p class="sub">Cuéntanos quién eres para reservar tu cupo.</p>
+        <div class="field-row">
+          <div class="field" id="f-nombres"><label>Nombres</label><input type="text" id="nombres" placeholder="Ej. Kevin Alexander"><div class="err">Ingresa tus nombres</div></div>
+          <div class="field" id="f-apellidos"><label>Apellidos</label><input type="text" id="apellidos" placeholder="Ej. Díaz Zumba"><div class="err">Ingresa tus apellidos</div></div>
+        </div>
+        <div class="field-row">
+          <div class="field" id="f-cedula"><label>Cédula <span class="opt">(opcional)</span></label><input type="text" id="cedula" placeholder="0605428028"><div class="err"></div></div>
+          <div class="field" id="f-ciudad"><label>Ciudad</label><input type="text" id="ciudad" placeholder="Ej. Riobamba"><div class="err">Ingresa tu ciudad</div></div>
+        </div>
+        <div class="field" id="f-universidad">
+          <label>Universidad</label>
+          <select id="universidad">
+            <option value="">Selecciona tu universidad…</option>
+            <option>ESPOCH</option>
+            <option>UNACH</option>
+            <option>Universidad Central del Ecuador (UCE)</option>
+            <option>PUCE</option>
+            <option>UTE</option>
+            <option>UNL</option>
+            <option>UTPL</option>
+            <option>USFQ</option>
+            <option>UDLA</option>
+            <option>UCSG</option>
+            <option>Universidad de Guayaquil</option>
+            <option>UTA</option>
+            <option>UNIANDES</option>
+            <option value="Otra">Otra</option>
+          </select>
+          <div class="err">Selecciona tu universidad</div>
+        </div>
+        <div class="field" id="f-universidad-otra" style="display:none;"><label>¿Cuál? <span class="opt">(escribe el nombre)</span></label><input type="text" id="universidadOtra" placeholder="Nombre de tu universidad"><div class="err"></div></div>
+        <div class="field-row">
+          <div class="field" id="f-email"><label>Correo electrónico</label><input type="email" id="email" placeholder="tucorreo@gmail.com"><div class="err">Ingresa un correo válido</div></div>
+          <div class="field" id="f-telefono"><label>WhatsApp / Teléfono</label><input type="tel" id="telefono" placeholder="0967054126"><div class="err">Ingresa tu número</div></div>
+        </div>
+        <div class="wnav">
+          <span class="spacer"></span>
+          <button class="btn-primary" onclick="nextStep(1)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- STEP 2: SEDE -->
+      <div class="wstep" data-step="2">
+        <h3>Elige tu sede</h3>
+        <p class="sub">Selecciona la ciudad donde quieres vivir la práctica presencial.</p>
+        <div class="opt-grid" id="sedeGrid">
+          <div class="opt-card radio" data-sede="Riobamba" data-fecha="6 y 7 de junio" onclick="selectSede(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">📍 Riobamba</div><div class="d">6 y 7 de junio · Cupos limitados</div></div>
+          </div>
+          <div class="opt-card radio" data-sede="Quito" data-fecha="13 y 14 de junio" onclick="selectSede(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">📍 Quito</div><div class="d">13 y 14 de junio · Cupos limitados</div></div>
+          </div>
+          <div class="opt-card radio" data-sede="Loja" data-fecha="20 y 21 de junio" onclick="selectSede(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">📍 Loja</div><div class="d">20 y 21 de junio · Cupos limitados</div></div>
+          </div>
+        </div>
+        <div class="field invalid" id="f-sede" style="margin-top:1rem;display:none;"><div class="err" style="display:block;">Selecciona una sede</div></div>
+        <div class="wnav">
+          <button class="btn-ghost" onclick="goStep(1)">← Atrás</button>
+          <span class="spacer"></span>
+          <button class="btn-primary" onclick="nextStep(2)">Continuar →</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: TALLERES -->
+      <div class="wstep" data-step="3">
+        <h3>Elige tus talleres</h3>
+        <p class="sub">Toma el paquete completo (mejor valor) o selecciona los talleres que quieras.</p>
+
+        <div class="opt-card pkg-card" data-pkg="1" onclick="togglePackage(this)">
+          <span class="pkg-badge">★ Mejor valor · Ahorra $30</span>
+          <div class="check"></div>
+          <div class="info"><div class="t">Paquete completo — los 4 talleres</div><div class="d">Incluye materiales, refrigerios y certificación + evaluación</div></div>
+          <div class="pr"><div class="now">$60</div><div class="pvp">$90</div></div>
+        </div>
+
+        <div style="text-align:center;font-size:0.74rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:1rem 0 0.85rem;">— o elige individuales —</div>
+
+        <div class="opt-grid cols" id="tallerGrid">
+          <div class="opt-card" data-taller="Suturas" data-promo="20" data-reg="25" onclick="toggleTaller(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">🪡 Suturas</div></div>
+            <div class="pr"><div class="now">$20</div><div class="pvp">$25</div></div>
+          </div>
+          <div class="opt-card" data-taller="EKG" data-promo="18" data-reg="25" onclick="toggleTaller(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">🫀 EKG</div></div>
+            <div class="pr"><div class="now">$18</div><div class="pvp">$25</div></div>
+          </div>
+          <div class="opt-card" data-taller="Gasometría" data-promo="15" data-reg="20" onclick="toggleTaller(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">🩸 Gasometría</div></div>
+            <div class="pr"><div class="now">$15</div><div class="pvp">$20</div></div>
+          </div>
+          <div class="opt-card" data-taller="Venoclisis y muestras" data-promo="15" data-reg="20" onclick="toggleTaller(this)">
+            <div class="check"></div>
+            <div class="info"><div class="t">💉 Venoclisis y muestras</div></div>
+            <div class="pr"><div class="now">$15</div><div class="pvp">$20</div></div>
+          </div>
+        </div>
+
+        <div class="hint" id="pkgHint">
+          <span>💡 Estás eligiendo los 4 talleres por separado. ¡Toma el paquete completo por <strong>$60</strong> y ahorra!</span>
+          <button onclick="switchToPackage()">Usar paquete</button>
+        </div>
+
+        <div class="field" id="f-codigo" style="margin-top:1.5rem;">
+          <label>Código de descuento <span class="opt">(ASO o promotor — opcional)</span></label>
+          <input type="text" id="codigo" placeholder="Ej. ESPOCH2026" oninput="updateSummary()" style="text-transform:uppercase;">
+        </div>
+
+        <div class="summary" id="summaryBox">
+          <h4>Resumen de tu inscripción</h4>
+          <div id="summaryLines"><div class="summary-empty">Aún no has seleccionado talleres.</div></div>
+          <div class="summary-total"><span class="l">Total a pagar</span><span class="v" id="totalAmount">$0</span></div>
+          <div class="save-tag" id="saveTag" style="text-align:right;"></div>
+        </div>
+        <div class="field invalid" id="f-taller" style="margin-top:0.5rem;display:none;"><div class="err" style="display:block;">Selecciona al menos un taller o el paquete completo</div></div>
+
+        <div class="wnav">
+          <button class="btn-ghost" onclick="goStep(2)">← Atrás</button>
+          <span class="spacer"></span>
+          <button class="btn-primary" onclick="nextStep(3)">Ir al pago →</button>
+        </div>
+      </div>
+
+      <!-- STEP 4: PAGO -->
+      <div class="wstep" data-step="4">
+        <h3>Realiza tu pago</h3>
+        <p class="sub">Para confirmar tu cupo, realiza el pago y sube tu comprobante.</p>
+
+        <div class="pay-amount">
+          <div class="l">Total a pagar</div>
+          <div class="v" id="payTotal">$0</div>
+          <div id="payDetail" style="font-size:0.78rem;color:var(--muted);margin-top:0.35rem;"></div>
+        </div>
+
+        <div class="pay-tabs">
+          <div class="pay-tab active" data-pay="transfer" onclick="selectPayTab(this)">🏦 Transferencia / Depósito</div>
+          <div class="pay-tab" data-pay="payphone" onclick="selectPayTab(this)">📱 Pago con PayPhone</div>
+        </div>
+
+        <!-- TRANSFER PANEL -->
+        <div class="pay-panel active" id="panel-transfer">
+          <div class="bank-card">
+            <div class="bhead"><span class="logo">Banco Pichincha</span><span style="font-size:0.78rem;color:var(--muted);">Cuenta de ahorros</span></div>
+            <div class="bank-row"><span class="k">Número de cuenta</span><span class="v">2204554808 <button class="copy-btn" onclick="copyText('2204554808', this)">Copiar</button></span></div>
+            <div class="bank-row"><span class="k">Titular</span><span class="v">Díaz Zumba Kevin Alexander</span></div>
+            <div class="bank-row"><span class="k">Cédula</span><span class="v">0605428028 <button class="copy-btn" onclick="copyText('0605428028', this)">Copiar</button></span></div>
+          </div>
+          <p style="font-size:0.82rem;color:var(--muted);margin-top:1rem;line-height:1.6;">Realiza la transferencia o depósito por el valor total y luego sube tu comprobante aquí abajo. 👇</p>
+
+          <div class="field" style="margin-top:1.5rem;">
+            <label>Comprobante de pago</label>
+            <div class="upload" id="uploadBox" onclick="document.getElementById('comprobante').click()">
+              <div class="ico">📎</div>
+              <div class="t">Toca para subir tu comprobante</div>
+              <div class="d">Imagen o PDF · máx. 10 MB</div>
+            </div>
+            <input type="file" id="comprobante" accept="image/*,application/pdf" style="display:none;" onchange="handleFile(this)">
+            <div class="upload-preview" id="uploadPreview">
+              <span class="fico">✅</span>
+              <span class="fname" id="fileName"></span>
+              <button class="remove" onclick="removeFile(event)">✕</button>
+            </div>
+            <div class="err" id="fileErr" style="color:var(--red);font-size:0.74rem;margin-top:0.4rem;display:none;">Sube tu comprobante de pago</div>
+          </div>
+        </div>
+
+        <!-- PAYPHONE PANEL -->
+        <div class="pay-panel" id="panel-payphone">
+          <div class="bank-card" style="text-align:center;">
+            <p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;">Paga de forma segura con tarjeta de crédito/débito o saldo PayPhone.</p>
+            <div id="pp-button"></div>
+            <p style="font-size:0.78rem;color:var(--muted);margin-top:1rem;" id="pp-note">La pasarela PayPhone se activa configurando tu token (ver instrucciones). Mientras tanto, usa transferencia. </p>
+          </div>
+        </div>
+
+        <label class="consent"><input type="checkbox" id="consent"> Acepto que MEDUCATORS use mis datos para gestionar mi inscripción y confirmar mi participación. El descuento está sujeto a validación del aliado.</label>
+
+        <div class="wnav">
+          <button class="btn-ghost" onclick="goStep(3)">← Atrás</button>
+          <span class="spacer"></span>
+          <button class="btn-primary" id="submitBtn" onclick="submitRegistration()">✓ Confirmar inscripción</button>
+        </div>
+      </div>
+
+      <!-- SUCCESS -->
+      <div class="success" id="successScreen">
+        <div class="big">🎉</div>
+        <h3>¡INSCRIPCIÓN ENVIADA!</h3>
+        <p id="successMsg">Gracias por inscribirte al Survival Weekend. Hemos recibido tus datos. Te confirmaremos tu cupo por WhatsApp en breve.</p>
+        <div style="margin-top:2rem;display:flex;gap:1rem;justify-content:center;flex-wrap:wrap;">
+          <a id="waConfirm" href="#" target="_blank" class="btn-primary">💬 Confirmar por WhatsApp</a>
+          <button class="btn-outline" onclick="resetWizard()">Inscribir a otra persona</button>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:1.5rem;font-size:0.85rem;color:var(--muted);">¿Tienes dudas? Escríbenos al WhatsApp <a href="https://wa.me/593967054126" style="color:var(--teal);font-weight:700;text-decoration:none;">096 705 4126</a></p>
+  </div>
+</section>
+
+<!-- ============ FAQ ============ -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="section-tag">Preguntas frecuentes</div>
+    <h2 class="section-title">RESOLVEMOS <span class="accent">TUS DUDAS</span></h2>
+    <div class="divider"></div>
+    <div class="faq-list">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el formato teórico + práctico? <span class="plus">+</span></div><div class="faq-a">Tendrás una semana de teoría online previa a tu ritmo, y luego el fin de semana de tu sede vives la práctica 100% presencial con docentes guía, materiales reales y simulación de casos clínicos.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo aplico mi código de descuento? <span class="plus">+</span></div><div class="faq-a">Si vienes por una ASO aliada o promotor, ingresa tu código en el paso 3 del formulario. Los precios promocionales aplican con código válido (sujeto a validación del aliado).</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo realizo el pago? <span class="plus">+</span></div><div class="faq-a">Puedes transferir o depositar a la cuenta de Banco Pichincha #2204554808 (Díaz Zumba Kevin Alexander, CI 0605428028) y subir tu comprobante en el formulario, o pagar con PayPhone cuando esté habilitado.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Puedo inscribirme a un solo taller? <span class="plus">+</span></div><div class="faq-a">¡Claro! Puedes elegir los talleres individuales que más te interesen, o tomar el paquete completo de los 4 talleres por $60 (mejor valor).</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Recibo certificado? <span class="plus">+</span></div><div class="faq-a">Sí. El paquete completo incluye certificación + evaluación. Al completar la evaluación recibes tu certificado oficial de MEDUCATORS.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Para quién es este evento? <span class="plus">+</span></div><div class="faq-a">Ideal para cualquier estudiante del área de la salud que quiera ganar destreza clínica práctica antes del internado y el rural.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CTA ============ -->
+<section class="cta-section">
+  <div class="cta-glow"></div>
+  <h2>¿LISTO PARA<br><span class="line2">SOBREVIVIR?</span></h2>
+  <p>Los cupos son limitados por sede. Reserva tu lugar y da el siguiente paso en tu formación clínica.</p>
+  <div class="cta-actions">
+    <a href="#inscripcion" class="btn-primary">Inscribirme ahora</a>
+    <a href="https://wa.me/593967054126" class="btn-outline">💬 Consultar por WhatsApp</a>
+  </div>
+</section>
+
+<footer>
+  <p><strong>MEDUCATORS</strong> — Survival Weekend · De la teoría a la acción</p>
+  <p style="margin-top:0.5rem;font-size:0.74rem;">Educación en salud del futuro · Ecuador · WhatsApp 096 705 4126</p>
+</footer>
+
+<a class="wa-float" href="https://wa.me/593967054126?text=Hola%20MEDUCATORS,%20tengo%20una%20duda%20sobre%20el%20Survival%20Weekend" target="_blank" aria-label="WhatsApp">💬</a>
+<div class="toast" id="toast"></div>
+
+<!-- Supabase JS (solo se usa si configuras tus credenciales abajo) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+/* ============================================================
+   ⚙️  CONFIGURACIÓN  — Kevin, edita SOLO este bloque
+   ============================================================ */
+const CONFIG = {
+  // 1) SUPABASE (para guardar inscripciones + comprobantes)
+  //    Pégalo desde tu proyecto Supabase → Settings → API
+  SUPABASE_URL: "",        // ej: https://xxxxx.supabase.co
+  SUPABASE_ANON_KEY: "",   // ej: eyJhbGciOi...
+  SUPABASE_TABLE: "inscripciones_survival",
+  SUPABASE_BUCKET: "comprobantes",
+
+  // 2) GOOGLE SHEETS (opcional) — pega la URL de tu Apps Script Web App
+  //    Si la dejas vacía, no se usa. (Instrucciones en el archivo aparte)
+  SHEETS_WEBHOOK_URL: "",
+
+  // 3) PAYPHONE (opcional) — pega tu Token y Store ID de la Cajita de Pagos
+  PAYPHONE_TOKEN: "",
+  PAYPHONE_STORE_ID: "",
+
+  // 4) Contacto
+  WHATSAPP: "593967054126"
+};
+/* ============================================================ */
+
+// --- init supabase si hay credenciales ---
+let SB = null;
+try {
+  if (CONFIG.SUPABASE_URL && CONFIG.SUPABASE_ANON_KEY && window.supabase) {
+    SB = window.supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
+  }
+} catch (e) { console.warn("Supabase no inicializado:", e); }
+
+// ===== ESTADO =====
+const PRICES = {
+  "Suturas":      { promo: 20, reg: 25 },
+  "EKG":          { promo: 18, reg: 25 },
+  "Gasometría":   { promo: 15, reg: 20 },
+  "Venoclisis y muestras": { promo: 15, reg: 20 }
+};
+const PKG = { promo: 60, reg: 90 };
+
+let state = {
+  sede: null, fecha: null,
+  package: false,
+  talleres: [],     // nombres
+  codigo: "",
+  file: null,
+  payMethod: "transfer"
+};
+
+// ===== NAVEGACIÓN DE PASOS =====
+let current = 1;
+function showStep(n) {
+  document.querySelectorAll('.wstep').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+  document.querySelectorAll('.step-dot').forEach(d => {
+    const ds = +d.dataset.step;
+    d.classList.toggle('active', ds === n);
+    d.classList.toggle('done', ds < n);
+  });
+  current = n;
+  document.getElementById('wizard').scrollIntoView({ behavior:'smooth', block:'start' });
+}
+function goStep(n){ showStep(n); }
+
+function nextStep(from){
+  if (from === 1 && !validateStep1()) return;
+  if (from === 2 && !state.sede) { document.getElementById('f-sede').style.display='block'; return; }
+  if (from === 3) {
+    if (!state.package && state.talleres.length === 0){ document.getElementById('f-taller').style.display='block'; return; }
+    updatePayStep();
+  }
+  showStep(from + 1);
+}
+
+// ===== VALIDACIÓN PASO 1 =====
+function field(id){ return document.getElementById(id); }
+function setInvalid(fid, bad){ field(fid).classList.toggle('invalid', bad); }
+function validateStep1(){
+  let ok = true;
+  const checks = [
+    ['nombres','f-nombres', v=>v.trim().length>1],
+    ['apellidos','f-apellidos', v=>v.trim().length>1],
+    ['ciudad','f-ciudad', v=>v.trim().length>1],
+    ['universidad','f-universidad', v=>v!==''],
+    ['email','f-email', v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)],
+    ['telefono','f-telefono', v=>v.replace(/\D/g,'').length>=7],
+  ];
+  checks.forEach(([id,fid,test])=>{
+    const bad = !test(field(id).value);
+    setInvalid(fid, bad);
+    if (bad) ok = false;
+  });
+  // universidad otra
+  if (field('universidad').value === 'Otra' && field('universidadOtra').value.trim().length < 2){
+    setInvalid('f-universidad-otra', true); ok=false;
+  } else setInvalid('f-universidad-otra', false);
+  return ok;
+}
+field('universidad').addEventListener('change', e=>{
+  document.getElementById('f-universidad-otra').style.display = e.target.value==='Otra' ? 'block' : 'none';
+});
+
+// ===== SEDE =====
+function selectSede(el){
+  document.querySelectorAll('#sedeGrid .opt-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  state.sede = el.dataset.sede;
+  state.fecha = el.dataset.fecha;
+  document.getElementById('f-sede').style.display='none';
+}
+function preselectPackage(){
+  // navega a inscripción y deja paquete listo
+  setTimeout(()=>{ /* el scroll lo hace el ancla */ }, 0);
+}
+
+// ===== TALLERES =====
+function recomputeTalleres(){
+  state.talleres = [...document.querySelectorAll('#tallerGrid .opt-card.selected')].map(c=>c.dataset.taller);
+}
+function toggleTaller(el){
+  if (state.package) return;
+  el.classList.toggle('selected');
+  recomputeTalleres();
+  // hint si seleccionó los 4
+  document.getElementById('pkgHint').classList.toggle('show', state.talleres.length === 4);
+  updateSummary();
+}
+function togglePackage(el){
+  state.package = !state.package;
+  el.classList.toggle('selected', state.package);
+  document.querySelectorAll('#tallerGrid .opt-card').forEach(c=>{
+    c.classList.toggle('disabled', state.package);
+    if (state.package) c.classList.remove('selected');
+  });
+  if (state.package) state.talleres = [];
+  document.getElementById('pkgHint').classList.remove('show');
+  updateSummary();
+}
+function switchToPackage(){
+  document.querySelectorAll('#tallerGrid .opt-card').forEach(c=>c.classList.remove('selected'));
+  state.talleres = [];
+  const pk = document.querySelector('.pkg-card');
+  state.package = true; pk.classList.add('selected');
+  document.querySelectorAll('#tallerGrid .opt-card').forEach(c=>c.classList.add('disabled'));
+  document.getElementById('pkgHint').classList.remove('show');
+  updateSummary();
+}
+
+function hasCode(){ return field('codigo').value.trim().length >= 2; }
+
+function computeTotal(){
+  const code = hasCode();
+  if (state.package){
+    return { total: code ? PKG.promo : PKG.reg, reg: PKG.reg, items:[{name:'Paquete completo (4 talleres)', price: code?PKG.promo:PKG.reg}] };
+  }
+  let total=0, reg=0; const items=[];
+  state.talleres.forEach(t=>{
+    const p = code ? PRICES[t].promo : PRICES[t].reg;
+    total += p; reg += PRICES[t].reg;
+    items.push({name:t, price:p});
+  });
+  return { total, reg, items };
+}
+
+function updateSummary(){
+  field('codigo').value = field('codigo').value.toUpperCase();
+  state.codigo = field('codigo').value.trim();
+  const { total, items } = computeTotal();
+  const lines = document.getElementById('summaryLines');
+  if (items.length === 0){
+    lines.innerHTML = '<div class="summary-empty">Aún no has seleccionado talleres.</div>';
+    document.getElementById('saveTag').textContent='';
+  } else {
+    lines.innerHTML = items.map(i=>`<div class="summary-line"><span>${i.name}</span><span>$${i.price}</span></div>`).join('');
+    if (hasCode()){
+      const reg = state.package ? PKG.reg : state.talleres.reduce((s,t)=>s+PRICES[t].reg,0);
+      const save = reg - total;
+      lines.innerHTML += `<div class="summary-line"><span>Descuento (código ${state.codigo})</span><span style="color:var(--orange)">−$${save}</span></div>`;
+      document.getElementById('saveTag').textContent = `Ahorras $${save} con tu código`;
+    } else {
+      document.getElementById('saveTag').innerHTML = '<span style="color:var(--muted)">💡 Ingresa tu código de ASO/promotor para precio con descuento</span>';
+    }
+  }
+  document.getElementById('totalAmount').textContent = '$'+total;
+  if (items.length>0) document.getElementById('f-taller').style.display='none';
+}
+
+function updatePayStep(){
+  const { total, items } = computeTotal();
+  document.getElementById('payTotal').textContent = '$'+total;
+  const names = items.map(i=>i.name).join(', ');
+  document.getElementById('payDetail').textContent = `${state.sede || ''} · ${names}` + (hasCode() ? ' · con código '+state.codigo : '');
+}
+
+// ===== PAGO TABS =====
+function selectPayTab(el){
+  document.querySelectorAll('.pay-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  state.payMethod = el.dataset.pay;
+  document.querySelectorAll('.pay-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('panel-'+state.payMethod).classList.add('active');
+  if (state.payMethod==='payphone') initPayphone();
+}
+
+// ===== ARCHIVO =====
+function handleFile(input){
+  const f = input.files[0];
+  if (!f) return;
+  if (f.size > 10*1024*1024){ showToast('El archivo supera 10 MB'); input.value=''; return; }
+  state.file = f;
+  document.getElementById('fileName').textContent = f.name;
+  document.getElementById('uploadPreview').classList.add('show');
+  document.getElementById('uploadBox').style.display='none';
+  document.getElementById('fileErr').style.display='none';
+}
+function removeFile(e){
+  e.stopPropagation();
+  state.file = null;
+  field('comprobante').value='';
+  document.getElementById('uploadPreview').classList.remove('show');
+  document.getElementById('uploadBox').style.display='block';
+}
+// drag & drop
+const ub = document.getElementById('uploadBox');
+['dragenter','dragover'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.remove('drag');}));
+ub.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f){ field('comprobante').files=e.dataTransfer.files; handleFile(field('comprobante')); }});
+
+// ===== COPIAR =====
+function copyText(t, btn){
+  navigator.clipboard.writeText(t).then(()=>{ const o=btn.textContent; btn.textContent='✓'; showToast('Copiado: '+t); setTimeout(()=>btn.textContent=o,1500); });
+}
+
+// ===== TOAST =====
+let toastTimer;
+function showToast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+// ===== FAQ =====
+function toggleFaq(el){ el.parentElement.classList.toggle('open'); }
+
+// ===== PAYPHONE (opcional) =====
+let ppLoaded=false;
+function initPayphone(){
+  const note = document.getElementById('pp-note');
+  if (!CONFIG.PAYPHONE_TOKEN || !CONFIG.PAYPHONE_STORE_ID){
+    note.innerHTML = 'La pasarela PayPhone se activa configurando tu <b>token</b> y <b>storeId</b> en el bloque CONFIG (ver instrucciones). Mientras tanto, usa transferencia.';
+    return;
+  }
+  if (ppLoaded) return;
+  // Carga el SDK de la Cajita de Pagos de PayPhone
+  const { total } = computeTotal();
+  const link = document.createElement('link');
+  link.rel='stylesheet'; link.href='https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.css';
+  document.head.appendChild(link);
+  const sc = document.createElement('script');
+  sc.src='https://cdn.payphonetodoesposible.com/box/v1.1/payphone-payment-box.js';
+  sc.onload = ()=>{
+    try {
+      const amount = total*100; // PayPhone trabaja en centavos
+      // eslint-disable-next-line no-undef
+      new PPaymentButtonBox({
+        token: CONFIG.PAYPHONE_TOKEN,
+        clientTransactionId: 'SW-'+Date.now(),
+        amount: amount, amountWithoutTax: amount, currency:'USD',
+        storeId: CONFIG.PAYPHONE_STORE_ID,
+        reference:'Survival Weekend - '+(state.sede||'')
+      }).render('pp-button');
+      note.textContent='Completa el pago en el botón de arriba. Al confirmar, recuerda enviar tu inscripción.';
+    } catch(err){ note.textContent='No se pudo cargar PayPhone. Usa transferencia.'; }
+  };
+  document.body.appendChild(sc);
+  ppLoaded=true;
+}
+
+// ===== ENVÍO =====
+function buildWhatsAppMessage(reg){
+  const t = reg.package ? 'Paquete completo (4 talleres)' : reg.talleres.join(', ');
+  const msg =
+`*NUEVA INSCRIPCIÓN — Survival Weekend* 🩺
+*Nombre:* ${reg.nombres} ${reg.apellidos}
+*Ciudad:* ${reg.ciudad}
+*Universidad:* ${reg.universidad}
+*Sede:* ${reg.sede} (${reg.fecha})
+*Talleres:* ${t}
+*Código:* ${reg.codigo || 'sin código'}
+*Total:* $${reg.total}
+*Contacto:* ${reg.telefono} · ${reg.email}`;
+  return encodeURIComponent(msg);
+}
+
+async function submitRegistration(){
+  // validaciones finales
+  if (!validateStep1()){ showToast('Revisa tus datos en el paso 1'); showStep(1); return; }
+  if (!state.sede){ showToast('Selecciona una sede'); showStep(2); return; }
+  if (!state.package && state.talleres.length===0){ showToast('Selecciona al menos un taller'); showStep(3); return; }
+  if (!field('consent').checked){ showToast('Acepta los términos para continuar'); return; }
+  if (state.payMethod==='transfer' && !state.file){
+    document.getElementById('fileErr').style.display='block';
+    showToast('Sube tu comprobante de pago'); return;
+  }
+
+  const btn = document.getElementById('submitBtn');
+  btn.disabled = true; btn.textContent = 'Enviando…';
+
+  const { total } = computeTotal();
+  const uni = field('universidad').value === 'Otra' ? field('universidadOtra').value.trim() : field('universidad').value;
+  const reg = {
+    nombres: field('nombres').value.trim(),
+    apellidos: field('apellidos').value.trim(),
+    cedula: field('cedula').value.trim(),
+    ciudad: field('ciudad').value.trim(),
+    universidad: uni,
+    email: field('email').value.trim(),
+    telefono: field('telefono').value.trim(),
+    sede: state.sede, fecha: state.fecha,
+    package: state.package,
+    talleres: state.package ? ['Paquete completo'] : state.talleres,
+    codigo: state.codigo,
+    total: total,
+    metodo_pago: state.payMethod,
+    fecha_registro: new Date().toISOString()
+  };
+
+  try {
+    let comprobanteUrl = null;
+
+    // 1) Subir comprobante a Supabase Storage
+    if (SB && state.file){
+      const ext = state.file.name.split('.').pop();
+      const path = `${reg.sede}/${Date.now()}_${reg.apellidos.replace(/\s+/g,'')}.${ext}`;
+      const { error: upErr } = await SB.storage.from(CONFIG.SUPABASE_BUCKET).upload(path, state.file, { upsert:false });
+      if (upErr) throw upErr;
+      const { data: pub } = SB.storage.from(CONFIG.SUPABASE_BUCKET).getPublicUrl(path);
+      comprobanteUrl = pub.publicUrl;
+    }
+
+    // 2) Guardar fila en Supabase
+    if (SB){
+      const row = { ...reg, talleres: reg.talleres.join(', '), comprobante_url: comprobanteUrl };
+      const { error } = await SB.from(CONFIG.SUPABASE_TABLE).insert([row]);
+      if (error) throw error;
+    }
+
+    // 3) (opcional) Google Sheets webhook
+    if (CONFIG.SHEETS_WEBHOOK_URL){
+      try {
+        await fetch(CONFIG.SHEETS_WEBHOOK_URL, {
+          method:'POST', mode:'no-cors',
+          headers:{'Content-Type':'text/plain;charset=utf-8'},
+          body: JSON.stringify({ ...reg, talleres: reg.talleres.join(', '), comprobante_url: comprobanteUrl })
+        });
+      } catch(e){ console.warn('Sheets webhook falló', e); }
+    }
+
+    finishSuccess(reg, !!SB);
+  } catch (err){
+    console.error(err);
+    showToast('Hubo un problema al guardar. Te enviamos por WhatsApp para no perder tu inscripción.');
+    finishSuccess(reg, false); // fallback: igual mostramos éxito + WhatsApp
+  } finally {
+    btn.disabled=false; btn.textContent='✓ Confirmar inscripción';
+  }
+}
+
+function finishSuccess(reg, saved){
+  // ocultar pasos, mostrar éxito
+  document.querySelectorAll('.wstep').forEach(s=>s.classList.remove('active'));
+  document.querySelector('.steps-bar').style.display='none';
+  const sc = document.getElementById('successScreen');
+  sc.classList.add('show');
+  const wa = `https://wa.me/${CONFIG.WHATSAPP}?text=${buildWhatsAppMessage(reg)}`;
+  document.getElementById('waConfirm').href = wa;
+  if (!saved){
+    document.getElementById('successMsg').innerHTML =
+      'Hemos registrado tu inscripción. <b>Por favor confírmala por WhatsApp</b> (el botón de abajo ya lleva tus datos) y adjunta tu comprobante de pago para asegurar tu cupo.';
+  }
+}
+
+function resetWizard(){
+  location.reload();
+}
+
+// ===== reveal on scroll =====
+const reveals = document.querySelectorAll('.reveal');
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('revealed'), i*70); obs.unobserve(e.target); } });
+},{threshold:0.1});
+reveals.forEach(el=>obs.observe(el));
+
+// close mobile nav on link click
+document.querySelectorAll('#navlinks a').forEach(a=>a.addEventListener('click',()=>document.getElementById('navlinks').classList.remove('open')));
+
+updateSummary();
+</script>
+</body>
+</html>
