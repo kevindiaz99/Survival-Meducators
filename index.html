@@ -1218,10 +1218,11 @@ function removeFile(e){
   document.getElementById('uploadBox').style.display='block';
 }
 // drag & drop
-const ub = document.getElementById('uploadBox');
-['dragenter','dragover'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.add('drag');}));
-['dragleave','drop'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.remove('drag');}));
-ub.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f){ field('comprobante').files=e.dataTransfer.files; handleFile(field('comprobante')); }});
+// drag & drop
+const uploadArea = document.getElementById('uploadBox');
+['dragenter','dragover'].forEach(ev=>uploadArea.addEventListener(ev,e=>{e.preventDefault();uploadArea.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>uploadArea.addEventListener(ev,e=>{e.preventDefault();uploadArea.classList.remove('drag');}));
+uploadArea.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f){ field('comprobante').files=e.dataTransfer.files; handleFile(field('comprobante')); }});
 
 // ===== COPIAR =====
 function copyText(t, btn){
