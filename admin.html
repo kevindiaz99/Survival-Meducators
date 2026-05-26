@@ -412,9 +412,18 @@ async function doLogout(){
 async function loadData(){
   if (!SB) return;
   document.getElementById('tbody').innerHTML = '<tr><td colspan="9"><div class="loading"><div class="spin"></div>Cargando…</div></td></tr>';
-  const { data, error } = await SB.from(CONFIG.SUPABASE_TABLE).select('*').order('fecha_registro',{ascending:false});
+  // Pedimos el conteo real + todas las filas, ordenando por id (nunca es nulo) y con límite alto.
+  const { data, error, count } = await SB
+    .from(CONFIG.SUPABASE_TABLE)
+    .select('*', { count: 'exact' })
+    .order('id', { ascending: false })
+    .range(0, 9999);
   if (error){ toast('Error al cargar: '+error.message, true); document.getElementById('tbody').innerHTML=''; return; }
   rows = (data||[]).map(r => ({ ...r, estado_pago: r.estado_pago || 'pendiente' }));
+  // Aviso si la base reporta más filas de las que pudimos leer (típico de políticas RLS)
+  if (typeof count === 'number' && count > rows.length){
+    toast(`⚠️ Hay ${count} inscripciones en la base, pero solo se leyeron ${rows.length}. Revisa las políticas RLS.`, true);
+  }
   renderStats(); renderTable();
 }
 
