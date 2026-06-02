@@ -189,6 +189,7 @@
     <div class="tabs">
       <button class="tab active" data-view="inscritos" onclick="switchView('inscritos')">📋 Inscritos</button>
       <button class="tab" data-view="finanzas" onclick="switchView('finanzas')">💰 Finanzas</button>
+      <button class="tab" data-view="huerfanos" onclick="switchView('huerfanos')">🔍 Huérfanos</button>
     </div>
 
     <!-- ===== VISTA INSCRITOS ===== -->
@@ -296,6 +297,16 @@
         <button class="btn btn-sm btn-ghost" onclick="exportCSV()">⬇ Exportar todo a Excel</button>
       </div>
     </div><!-- /view-finanzas -->
+
+    <!-- ===== VISTA HUÉRFANOS ===== -->
+    <div class="view" id="view-huerfanos">
+      <div class="fin-card" style="border-color:var(--orange);background:rgba(245,166,35,0.04);">
+        <div class="fin-head"><h4>🔍 Comprobantes huérfanos en Storage</h4></div>
+        <p style="font-size:.88rem;color:var(--muted);margin-bottom:1rem;">Estos archivos están subidos en tu bucket de Supabase pero <b>NO tienen una inscripción asociada</b>. Probablemente son los chicos que se "perdieron". Cruza con tus transferencias del banco para identificarlos.</p>
+        <button class="btn btn-sm" onclick="scanOrphans()" id="scanBtn" style="margin-bottom:1rem;">🔍 Buscar huérfanos</button>
+        <div id="orphanResults"><p class="meta" style="text-align:center;padding:1.5rem;">Toca el botón para escanear el bucket.</p></div>
+      </div>
+    </div><!-- /view-huerfanos -->
   </div>
 </div>
 
@@ -510,6 +521,46 @@ function renderFinanzas(){
   document.getElementById('f-codigo-body').innerHTML = codArr.length
     ? codArr.map(([k,v])=>`<tr><td>${esc(k)}</td><td>${v.n}</td><td class="v">${money(v.m)}</td></tr>`).join('')
     : '<tr><td colspan="3" class="meta">Sin datos.</td></tr>';
+}
+
+// ---------- HUÉRFANOS (comprobantes en Storage sin fila en la tabla) ----------
+async function scanOrphans(){
+  const btn = document.getElementById('scanBtn');
+  const res = document.getElementById('orphanResults');
+  btn.disabled = true; btn.textContent = 'Escaneando…';
+  res.innerHTML = '<div class="loading"><div class="spin"></div>Buscando archivos en Storage…</div>';
+  try {
+    // Listar carpetas del bucket (cada sede es una carpeta)
+    const carpetas = ['Riobamba','Quito','Loja','sin-sede',''];
+    let allFiles = [];
+    for (const c of carpetas){
+      try {
+        const { data, error } = await SB.storage.from('comprobantes').list(c, { limit: 1000, sortBy: { column:'created_at', order:'desc' } });
+        if (error) continue;
+        (data||[]).forEach(f=>{ if(f.name && !f.name.endsWith('/')) allFiles.push({ folder:c, name:f.name, created:f.created_at, size: f.metadata?.size }); });
+      } catch(e){}
+    }
+    // URLs públicas de las filas ya registradas (para comparar)
+    const usadasUrls = new Set(rows.map(r=>r.comprobante_url).filter(Boolean));
+    const usadasNames = new Set([...usadasUrls].map(u=>{ try { return decodeURIComponent(u.split('/').pop().split('?')[0]); } catch{ return ''; }}));
+    // Huérfanos = archivos cuyo nombre NO está en ninguna URL registrada
+    const orphans = allFiles.filter(f=>!usadasNames.has(f.name));
+    if (allFiles.length === 0){
+      res.innerHTML = '<p class="meta" style="text-align:center;padding:1.5rem;">No se encontraron archivos en el bucket, o el bucket no es público. Revisa permisos.</p>';
+    } else if (orphans.length === 0){
+      res.innerHTML = `<p style="color:var(--green);text-align:center;padding:1.5rem;font-weight:700;">✅ Sin huérfanos. Los ${allFiles.length} comprobantes en Storage están asociados a una inscripción.</p>`;
+    } else {
+      res.innerHTML = `<p style="color:var(--orange);font-weight:700;margin-bottom:1rem;">⚠️ ${orphans.length} comprobante(s) huérfano(s) encontrado(s) de ${allFiles.length} totales:</p>` +
+        '<div class="table-scroll"><table style="min-width:600px;"><thead><tr><th>Sede</th><th>Archivo</th><th>Subido</th><th>Ver</th></tr></thead><tbody>' +
+        orphans.map(f=>{
+          const url = SB.storage.from('comprobantes').getPublicUrl(`${f.folder?f.folder+'/':''}${f.name}`).data.publicUrl;
+          return `<tr><td><span class="pill pill-sede">${esc(f.folder||'—')}</span></td><td style="font-size:.78rem;">${esc(f.name)}</td><td class="meta">${fmtDate(f.created)}</td><td><a href="${esc(url)}" target="_blank" class="iconbtn" title="Abrir">📎</a></td></tr>`;
+        }).join('') + '</tbody></table></div>' +
+        '<p style="margin-top:1rem;font-size:.82rem;color:var(--muted);">💡 Abre cada comprobante: en la imagen verás el nombre del estudiante. Cruza con tus transferencias del banco y agrégalos manualmente con el botón <b>+ Agregar manual</b> (próximamente) o desde Supabase directo.</p>';
+    }
+  } catch(err){
+    res.innerHTML = `<p style="color:var(--red);padding:1rem;">Error: ${esc(err.message||err)}. Verifica que el bucket "comprobantes" exista y sea legible.</p>`;
+  } finally { btn.disabled=false; btn.textContent='🔍 Buscar huérfanos'; }
 }
 
 function fmtDate(s){ if(!s) return '—'; const d=new Date(s); return d.toLocaleDateString('es-EC',{day:'2-digit',month:'short'})+' '+d.toLocaleTimeString('es-EC',{hour:'2-digit',minute:'2-digit'}); }
