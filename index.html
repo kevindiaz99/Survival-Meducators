@@ -1001,18 +1001,18 @@
 const CONFIG = {
   // 1) SUPABASE (para guardar inscripciones + comprobantes)
   //    Pégalo desde tu proyecto Supabase → Settings → API
-  SUPABASE_URL: "https://zfnoarsyxzqdxoqyonez.supabase.co",        // ej: https://xxxxx.supabase.co
-  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmbm9hcnN5eHpxZHhvcXlvbmV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzMyMzAsImV4cCI6MjA5NDk0OTIzMH0.SVo0wgqIOmP2wI9bT3YgJ2mEZkvr7bm3gMiFMxKTK0g",   // ej: eyJhbGciOi...
+  SUPABASE_URL: "https://zfnoarsyxzqdxoqyonez.supabase.co",
+  SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpmbm9hcnN5eHpxZHhvcXlvbmV6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkzNzMyMzAsImV4cCI6MjA5NDk0OTIzMH0.SVo0wgqIOmP2wI9bT3YgJ2mEZkvr7bm3gMiFMxKTK0g",
   SUPABASE_TABLE: "inscripciones_survival",
   SUPABASE_BUCKET: "comprobantes",
 
   // 2) GOOGLE SHEETS (opcional) — pega la URL de tu Apps Script Web App
   //    Si la dejas vacía, no se usa. (Instrucciones en el archivo aparte)
-  SHEETS_WEBHOOK_URL: "https://script.google.com/macros/s/AKfycbyAbm2evow_amnYb-gRHDgN6rS6Z_Kf05kTmKGf5hpjL1s2qVPAnqAJLvWUGI6VWrwq/exec",
+  SHEETS_WEBHOOK_URL: "",
 
   // 3) PAYPHONE (opcional) — pega tu Token y Store ID de la Cajita de Pagos
-  PAYPHONE_TOKEN: "QqbX_5tvDp__8VqKsnZ_eBSXixMY-gC1w2UMi2eefZqilaIQB0GnXiV-uve20g5uDsdAY4rruhbltw7qcq-Q0ieKHMNvSZ0IruUm4fKqyoBEK3xP_M7wjeMxgweP0XHeTmXLV5CS06izIKkuAUDQf7W9rm2Uue7OXdfm8sJCe4aCa0k4F0Zt4WMMM7ibIGiedHNqcuVw03IGUeGj_B7iomJwMjb3avpQWTG9dhnKeg933ypZFxvy2xpabbyL0MQfFy_2FyvvbPIi8SCDnvPgDVnwy92JKBrSEgatCXaOD5x8m2dcb7TnX73sXwuFqYQRvg5qHg",
-  PAYPHONE_STORE_ID: " ",
+  PAYPHONE_TOKEN: "",
+  PAYPHONE_STORE_ID: "",
 
   // 4) Contacto
   WHATSAPP: "593967054126"
@@ -1218,11 +1218,10 @@ function removeFile(e){
   document.getElementById('uploadBox').style.display='block';
 }
 // drag & drop
-// drag & drop
-const uploadArea = document.getElementById('uploadBox');
-['dragenter','dragover'].forEach(ev=>uploadArea.addEventListener(ev,e=>{e.preventDefault();uploadArea.classList.add('drag');}));
-['dragleave','drop'].forEach(ev=>uploadArea.addEventListener(ev,e=>{e.preventDefault();uploadArea.classList.remove('drag');}));
-uploadArea.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f){ field('comprobante').files=e.dataTransfer.files; handleFile(field('comprobante')); }});
+const ub = document.getElementById('uploadBox');
+['dragenter','dragover'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.add('drag');}));
+['dragleave','drop'].forEach(ev=>ub.addEventListener(ev,e=>{e.preventDefault();ub.classList.remove('drag');}));
+ub.addEventListener('drop', e=>{ const f=e.dataTransfer.files[0]; if(f){ field('comprobante').files=e.dataTransfer.files; handleFile(field('comprobante')); }});
 
 // ===== COPIAR =====
 function copyText(t, btn){
@@ -1243,7 +1242,7 @@ function toggleFaq(el){ el.parentElement.classList.toggle('open'); }
 let ppLoaded=false;
 function initPayphone(){
   const note = document.getElementById('pp-note');
-  if (!CONFIG.PAYPHONE_TOKEN || !CONFIG.PAYPHONE_STORE_ID){
+  if (!CONFIG.PAYPHONE_TOKEN || !String(CONFIG.PAYPHONE_STORE_ID).trim()){
     note.innerHTML = 'La pasarela PayPhone se activa configurando tu <b>token</b> y <b>storeId</b> en el bloque CONFIG (ver instrucciones). Mientras tanto, usa transferencia.';
     return;
   }
@@ -1322,48 +1321,68 @@ async function submitRegistration(){
     fecha_registro: new Date().toISOString()
   };
 
+  // RESPALDO INMEDIATO en el navegador del estudiante — antes de cualquier llamada de red.
+  // Si todo falla, sus datos quedan aquí y al menos él los puede ver/recuperar.
+  try {
+    const backup = JSON.parse(localStorage.getItem('mw_backups') || '[]');
+    backup.push({ ...reg, _file: state.file ? state.file.name : null, _ts: Date.now() });
+    localStorage.setItem('mw_backups', JSON.stringify(backup.slice(-10)));
+  } catch(e){ /* sin localStorage, seguimos */ }
+
   try {
     let comprobanteUrl = null;
+    let comprobanteError = null;
 
-    // 1) Subir comprobante a Supabase Storage
+    // 1) Intentar subir comprobante a Supabase Storage (NO bloqueante)
     if (SB && state.file){
-      const ext = state.file.name.split('.').pop();
-      const path = `${reg.sede}/${Date.now()}_${reg.apellidos.replace(/\s+/g,'')}.${ext}`;
-      const { error: upErr } = await SB.storage.from(CONFIG.SUPABASE_BUCKET).upload(path, state.file, { upsert:false });
-      if (upErr) throw upErr;
-      const { data: pub } = SB.storage.from(CONFIG.SUPABASE_BUCKET).getPublicUrl(path);
-      comprobanteUrl = pub.publicUrl;
+      try {
+        const ext = (state.file.name.split('.').pop() || 'bin').toLowerCase().replace(/[^a-z0-9]/g,'');
+        // sanear apellido para evitar tildes/espacios/caracteres raros en el path
+        const safeApe = reg.apellidos.normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]/g,'') || 'sin-apellido';
+        const safeSede = (reg.sede||'sin-sede').normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^A-Za-z0-9]/g,'');
+        const path = `${safeSede}/${Date.now()}_${safeApe}_${Math.floor(Math.random()*9999)}.${ext}`;
+        const { error: upErr } = await SB.storage.from(CONFIG.SUPABASE_BUCKET).upload(path, state.file, { upsert:false });
+        if (upErr) { comprobanteError = upErr.message; console.warn('Comprobante NO se pudo subir:', upErr); }
+        else {
+          const { data: pub } = SB.storage.from(CONFIG.SUPABASE_BUCKET).getPublicUrl(path);
+          comprobanteUrl = pub.publicUrl;
+        }
+      } catch(e){ comprobanteError = String(e.message||e); console.warn('Error subiendo comprobante:', e); }
     }
 
-    // 2) Guardar fila en Supabase
+    // 2) SIEMPRE guardar la fila en Supabase (aunque el comprobante haya fallado)
+    let savedToDB = false;
+    let dbError = null;
     if (SB){
       const row = { ...reg, talleres: reg.talleres.join(', '), comprobante_url: comprobanteUrl };
       const { error } = await SB.from(CONFIG.SUPABASE_TABLE).insert([row]);
-      if (error) throw error;
+      if (error) { dbError = error.message; console.error('Insert falló:', error); }
+      else savedToDB = true;
     }
 
-    // 3) (opcional) Google Sheets webhook
+    // 3) (opcional) Google Sheets webhook — siempre lo intentamos como respaldo
     if (CONFIG.SHEETS_WEBHOOK_URL){
       try {
         await fetch(CONFIG.SHEETS_WEBHOOK_URL, {
           method:'POST', mode:'no-cors',
           headers:{'Content-Type':'text/plain;charset=utf-8'},
-          body: JSON.stringify({ ...reg, talleres: reg.talleres.join(', '), comprobante_url: comprobanteUrl })
+          body: JSON.stringify({ ...reg, talleres: reg.talleres.join(', '), comprobante_url: comprobanteUrl, _comp_error: comprobanteError, _db_error: dbError })
         });
       } catch(e){ console.warn('Sheets webhook falló', e); }
     }
 
-    finishSuccess(reg, !!SB);
+    // 4) Mostrar resultado HONESTO al estudiante
+    finishSuccess(reg, savedToDB, { comprobanteError, dbError, comprobanteUrl });
   } catch (err){
     console.error(err);
-    showToast('Hubo un problema al guardar. Te enviamos por WhatsApp para no perder tu inscripción.');
-    finishSuccess(reg, false); // fallback: igual mostramos éxito + WhatsApp
+    finishSuccess(reg, false, { dbError: String(err.message||err) });
   } finally {
     btn.disabled=false; btn.textContent='✓ Confirmar inscripción';
   }
 }
 
-function finishSuccess(reg, saved){
+function finishSuccess(reg, savedToDB, info){
+  info = info || {};
   // ocultar pasos, mostrar éxito
   document.querySelectorAll('.wstep').forEach(s=>s.classList.remove('active'));
   document.querySelector('.steps-bar').style.display='none';
@@ -1371,9 +1390,21 @@ function finishSuccess(reg, saved){
   sc.classList.add('show');
   const wa = `https://wa.me/${CONFIG.WHATSAPP}?text=${buildWhatsAppMessage(reg)}`;
   document.getElementById('waConfirm').href = wa;
-  if (!saved){
-    document.getElementById('successMsg').innerHTML =
-      'Hemos registrado tu inscripción. <b>Por favor confírmala por WhatsApp</b> (el botón de abajo ya lleva tus datos) y adjunta tu comprobante de pago para asegurar tu cupo.';
+
+  const msgEl = document.getElementById('successMsg');
+  const bigEl = sc.querySelector('.big');
+
+  if (savedToDB && !info.comprobanteError){
+    // todo perfecto
+    msgEl.innerHTML = 'Gracias por inscribirte al Survival Weekend. Hemos recibido tus datos y tu comprobante. Te confirmaremos tu cupo por WhatsApp en breve.';
+  } else if (savedToDB && info.comprobanteError){
+    // se guardó la inscripción, pero el comprobante NO se subió → pedir enviar por WhatsApp
+    if (bigEl) bigEl.innerHTML = '⚠️';
+    msgEl.innerHTML = '<b>Tu inscripción quedó registrada</b>, pero tu comprobante NO pudo subirse. <b>Es indispensable que nos lo envíes por WhatsApp ahora</b> con tu nombre completo para asegurar tu cupo. El botón de abajo ya lleva tus datos.';
+  } else {
+    // no se guardó nada → al WhatsApp ya o se pierde
+    if (bigEl) bigEl.innerHTML = '⚠️';
+    msgEl.innerHTML = '<b>No pudimos registrar tu inscripción automáticamente.</b> Por favor toca el botón verde de WhatsApp ahora mismo para que recibamos tus datos y tu comprobante de pago — así garantizamos tu cupo. No cierres esta ventana antes de hacerlo.';
   }
 }
 
