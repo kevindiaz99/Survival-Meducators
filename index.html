@@ -207,6 +207,32 @@
   .sede-month { font-size:0.78rem; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-top:0.2rem; }
   .sede-tag { display:inline-block; margin-top:1.25rem; font-size:0.68rem; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; color:var(--sc,var(--teal)); border:0.5px solid var(--sc,var(--teal)); border-radius:30px; padding:0.3rem 0.85rem; }
 
+  /* sede agotada */
+  .sede-card.sold-out { position:relative; }
+  .sede-card.sold-out::after {
+    content:'AGOTADO'; position:absolute; top:14px; right:-38px; transform:rotate(38deg);
+    background:var(--red); color:#fff; font-weight:800; font-size:0.72rem; letter-spacing:0.18em;
+    padding:0.32rem 3rem; box-shadow:0 4px 14px rgba(255,59,92,0.4); z-index:2;
+  }
+  .sede-card.sold-out .sede-pin, .sede-card.sold-out .sede-name, .sede-card.sold-out .sede-date, .sede-card.sold-out .sede-month { opacity:0.35; filter:grayscale(0.6); }
+  .sede-card.sold-out:hover { transform:none; border-color:var(--border); cursor:default; }
+  .sede-card.sold-out .sede-tag {
+    background:var(--red); color:#fff !important; border-color:var(--red) !important;
+    display:block; text-align:center; margin-top:1rem; padding:0.5rem 0.85rem;
+    font-size:0.74rem; opacity:1;
+  }
+  .sede-card.sold-out .sede-tag-note {
+    display:block; margin-top:0.6rem; font-size:0.72rem; color:var(--muted); font-style:italic; text-align:center; line-height:1.4;
+  }
+
+  /* opt-card (wizard) agotada */
+  .opt-card.sold-out { opacity:0.55; cursor:not-allowed; background:rgba(255,59,92,0.04); border-color:rgba(255,59,92,0.3) !important; }
+  .opt-card.sold-out:hover { border-color:rgba(255,59,92,0.3) !important; transform:none; }
+  .opt-card.sold-out .info .t::after {
+    content:' · AGOTADO'; color:var(--red); font-weight:800; font-size:0.78rem; letter-spacing:0.06em;
+  }
+  .opt-card.sold-out .info .d { color:var(--red); font-weight:600; }
+
   /* ——— PACKAGE / OFERTA ——— */
   .offer { position:relative; }
   .offer-card { margin-top:3rem; background:linear-gradient(135deg, var(--card), var(--card2)); border:2px solid var(--orange); border-radius:20px; padding:2.75rem; position:relative; overflow:hidden; }
@@ -637,14 +663,19 @@
     <h2 class="section-title">TRES CIUDADES, <span class="accent">MISMA EXPERIENCIA</span></h2>
     <div class="divider"></div>
     <p class="section-intro">El Survival Weekend llega a tres ciudades en junio. Cupos limitados por sede — asegura tu lugar.</p>
+    <div style="margin-top:1.25rem;padding:0.85rem 1.2rem;background:rgba(255,59,92,0.08);border:1px solid var(--red);border-radius:10px;display:inline-flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:var(--text);">
+      <span style="font-size:1.1rem;">🔥</span>
+      <span><strong style="color:var(--red);">Riobamba (6 y 7 junio) — AGOTADO en todos los talleres.</strong> Aún hay cupos en Quito y Loja.</span>
+    </div>
 
     <div class="sedes-grid">
-      <div class="sede-card reveal" style="--sc:var(--teal);">
+      <div class="sede-card sold-out reveal" style="--sc:var(--teal);">
         <div class="sede-pin">📍</div>
         <div class="sede-name">RIOBAMBA</div>
         <div class="sede-date">6 Y 7</div>
         <div class="sede-month">de junio</div>
-        <span class="sede-tag">Cupos limitados</span>
+        <span class="sede-tag">Cupos agotados · Todos los talleres</span>
+        <span class="sede-tag-note">¡Gracias por la increíble respuesta! Te esperamos en Quito o Loja.</span>
       </div>
       <div class="sede-card reveal" style="--sc:var(--orange);">
         <div class="sede-pin">📍</div>
@@ -796,9 +827,9 @@
         <h3>Elige tu sede</h3>
         <p class="sub">Selecciona la ciudad donde quieres vivir la práctica presencial.</p>
         <div class="opt-grid" id="sedeGrid">
-          <div class="opt-card radio" data-sede="Riobamba" data-fecha="6 y 7 de junio" onclick="selectSede(this)">
+          <div class="opt-card radio sold-out" data-sede="Riobamba" data-fecha="6 y 7 de junio" data-soldout="1" onclick="selectSede(this)">
             <div class="check"></div>
-            <div class="info"><div class="t">📍 Riobamba</div><div class="d">6 y 7 de junio · Cupos limitados</div></div>
+            <div class="info"><div class="t">📍 Riobamba</div><div class="d">Cupos agotados — todos los talleres llenos</div></div>
           </div>
           <div class="opt-card radio" data-sede="Quito" data-fecha="13 y 14 de junio" onclick="selectSede(this)">
             <div class="check"></div>
@@ -1099,6 +1130,10 @@ field('universidad').addEventListener('change', e=>{
 
 // ===== SEDE =====
 function selectSede(el){
+  if (el.dataset.soldout === '1' || el.classList.contains('sold-out')) {
+    showToast('🚫 Riobamba está agotado. Te esperamos en Quito o Loja.');
+    return;
+  }
   document.querySelectorAll('#sedeGrid .opt-card').forEach(c=>c.classList.remove('selected'));
   el.classList.add('selected');
   state.sede = el.dataset.sede;
