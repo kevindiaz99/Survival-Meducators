@@ -665,7 +665,7 @@
     <p class="section-intro">El Survival Weekend llega a tres ciudades en junio. Cupos limitados por sede — asegura tu lugar.</p>
     <div style="margin-top:1.25rem;padding:0.85rem 1.2rem;background:rgba(255,59,92,0.08);border:1px solid var(--red);border-radius:10px;display:inline-flex;align-items:center;gap:0.6rem;font-size:0.88rem;color:var(--text);">
       <span style="font-size:1.1rem;">🔥</span>
-      <span><strong style="color:var(--red);">Riobamba (6 y 7 junio) — AGOTADO en todos los talleres.</strong> Aún hay cupos en Quito y Loja.</span>
+      <span><strong style="color:var(--red);">Riobamba y Quito — AGOTADOS en todos los talleres.</strong> Aún hay cupos en Loja (27 y 28 de junio).</span>
     </div>
 
     <div class="sedes-grid">
@@ -675,19 +675,20 @@
         <div class="sede-date">6 Y 7</div>
         <div class="sede-month">de junio</div>
         <span class="sede-tag">Cupos agotados · Todos los talleres</span>
-        <span class="sede-tag-note">¡Gracias por la increíble respuesta! Te esperamos en Quito o Loja.</span>
+        <span class="sede-tag-note">¡Gracias por la increíble respuesta! Te esperamos en Loja.</span>
       </div>
-      <div class="sede-card reveal" style="--sc:var(--orange);">
+      <div class="sede-card sold-out reveal" style="--sc:var(--orange);">
         <div class="sede-pin">📍</div>
         <div class="sede-name">QUITO</div>
         <div class="sede-date">13 Y 14</div>
         <div class="sede-month">de junio</div>
-        <span class="sede-tag">Cupos limitados</span>
+        <span class="sede-tag">Cupos agotados · Todos los talleres</span>
+        <span class="sede-tag-note">¡Gracias por la increíble respuesta! Te esperamos en Loja.</span>
       </div>
       <div class="sede-card reveal" style="--sc:#2D9CDB;">
         <div class="sede-pin">📍</div>
         <div class="sede-name">LOJA</div>
-        <div class="sede-date">20 Y 21</div>
+        <div class="sede-date">27 Y 28</div>
         <div class="sede-month">de junio</div>
         <span class="sede-tag">Cupos limitados</span>
       </div>
@@ -831,13 +832,13 @@
             <div class="check"></div>
             <div class="info"><div class="t">📍 Riobamba</div><div class="d">Cupos agotados — todos los talleres llenos</div></div>
           </div>
-          <div class="opt-card radio" data-sede="Quito" data-fecha="13 y 14 de junio" onclick="selectSede(this)">
+          <div class="opt-card radio sold-out" data-sede="Quito" data-fecha="13 y 14 de junio" data-soldout="1" onclick="selectSede(this)">
             <div class="check"></div>
-            <div class="info"><div class="t">📍 Quito</div><div class="d">13 y 14 de junio · Cupos limitados</div></div>
+            <div class="info"><div class="t">📍 Quito</div><div class="d">Cupos agotados — todos los talleres llenos</div></div>
           </div>
-          <div class="opt-card radio" data-sede="Loja" data-fecha="20 y 21 de junio" onclick="selectSede(this)">
+          <div class="opt-card radio" data-sede="Loja" data-fecha="27 y 28 de junio" onclick="selectSede(this)">
             <div class="check"></div>
-            <div class="info"><div class="t">📍 Loja</div><div class="d">20 y 21 de junio · Cupos limitados</div></div>
+            <div class="info"><div class="t">📍 Loja</div><div class="d">27 y 28 de junio · Cupos limitados</div></div>
           </div>
         </div>
         <div class="field invalid" id="f-sede" style="margin-top:1rem;display:none;"><div class="err" style="display:block;">Selecciona una sede</div></div>
@@ -921,12 +922,7 @@
           <div id="payDetail" style="font-size:0.78rem;color:var(--muted);margin-top:0.35rem;"></div>
         </div>
 
-        <div class="pay-tabs">
-          <div class="pay-tab active" data-pay="transfer" onclick="selectPayTab(this)">🏦 Transferencia / Depósito</div>
-          <div class="pay-tab" data-pay="payphone" onclick="selectPayTab(this)">📱 Pago con PayPhone</div>
-        </div>
-
-        <!-- TRANSFER PANEL -->
+        <!-- TRANSFER PANEL (único método) -->
         <div class="pay-panel active" id="panel-transfer">
           <div class="bank-card">
             <div class="bhead"><span class="logo">Banco Pichincha</span><span style="font-size:0.78rem;color:var(--muted);">Cuenta de ahorros</span></div>
@@ -951,14 +947,15 @@
             </div>
             <div class="err" id="fileErr" style="color:var(--red);font-size:0.74rem;margin-top:0.4rem;display:none;">Sube tu comprobante de pago</div>
           </div>
-        </div>
 
-        <!-- PAYPHONE PANEL -->
-        <div class="pay-panel" id="panel-payphone">
-          <div class="bank-card" style="text-align:center;">
-            <p style="font-size:0.9rem;color:var(--text);margin-bottom:1rem;">Paga de forma segura con tarjeta de crédito/débito o saldo PayPhone.</p>
-            <div id="pp-button"></div>
-            <p style="font-size:0.78rem;color:var(--muted);margin-top:1rem;" id="pp-note">La pasarela PayPhone se activa configurando tu token (ver instrucciones). Mientras tanto, usa transferencia. </p>
+          <!-- Nota tarjeta vía WhatsApp -->
+          <div style="margin-top:1.5rem;padding:1rem 1.2rem;background:rgba(0,229,196,0.06);border:1px solid var(--teal);border-radius:10px;display:flex;align-items:center;gap:0.85rem;">
+            <span style="font-size:1.4rem;">💳</span>
+            <div style="flex:1;font-size:0.85rem;line-height:1.5;color:var(--text);">
+              <strong>¿Quieres pagar con tarjeta de crédito/débito?</strong><br>
+              <span style="color:var(--muted);">Escríbenos al WhatsApp y te ayudamos personalmente.</span>
+            </div>
+            <a href="https://wa.me/593967054126?text=Hola%20MEDUCATORS,%20quiero%20pagar%20con%20tarjeta%20mi%20inscripci%C3%B3n%20al%20Survival%20Weekend" target="_blank" style="background:#25D366;color:#fff;padding:0.55rem 1rem;border-radius:8px;font-size:0.78rem;font-weight:800;text-decoration:none;white-space:nowrap;">💬 Escribir</a>
           </div>
         </div>
 
@@ -996,7 +993,7 @@
     <div class="faq-list">
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo funciona el formato teórico + práctico? <span class="plus">+</span></div><div class="faq-a">Tendrás una semana de teoría online previa a tu ritmo, y luego el fin de semana de tu sede vives la práctica 100% presencial con docentes guía, materiales reales y simulación de casos clínicos.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo aplico mi código de descuento? <span class="plus">+</span></div><div class="faq-a">Si vienes por una ASO aliada o promotor, ingresa tu código en el paso 3 del formulario. Los precios promocionales aplican con código válido (sujeto a validación del aliado).</div></div>
-      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo realizo el pago? <span class="plus">+</span></div><div class="faq-a">Puedes transferir o depositar a la cuenta de Banco Pichincha #2204554808 (Díaz Zumba Kevin Alexander, CI 0605428028) y subir tu comprobante en el formulario, o pagar con PayPhone cuando esté habilitado.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Cómo realizo el pago? <span class="plus">+</span></div><div class="faq-a">Transfiere o deposita a la cuenta de Banco Pichincha #2204554808 (Díaz Zumba Kevin Alexander, CI 0605428028) y sube tu comprobante en el formulario. Si quieres pagar con tarjeta de crédito/débito, escríbenos al WhatsApp 096 705 4126 y te ayudamos personalmente.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Puedo inscribirme a un solo taller? <span class="plus">+</span></div><div class="faq-a">¡Claro! Puedes elegir los talleres individuales que más te interesen, o tomar el paquete completo de los 4 talleres por $60 (mejor valor).</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Recibo certificado? <span class="plus">+</span></div><div class="faq-a">Sí. El paquete completo incluye certificación + evaluación. Al completar la evaluación recibes tu certificado oficial de MEDUCATORS.</div></div>
       <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">¿Para quién es este evento? <span class="plus">+</span></div><div class="faq-a">Ideal para cualquier estudiante del área de la salud que quiera ganar destreza clínica práctica antes del internado y el rural.</div></div>
@@ -1131,7 +1128,7 @@ field('universidad').addEventListener('change', e=>{
 // ===== SEDE =====
 function selectSede(el){
   if (el.dataset.soldout === '1' || el.classList.contains('sold-out')) {
-    showToast('🚫 Riobamba está agotado. Te esperamos en Quito o Loja.');
+    showToast('🚫 Esa sede está agotada. Te esperamos en Loja (27 y 28 de junio).');
     return;
   }
   document.querySelectorAll('#sedeGrid .opt-card').forEach(c=>c.classList.remove('selected'));
