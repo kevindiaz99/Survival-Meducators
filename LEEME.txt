@@ -1,0 +1,63 @@
+SURVIVAL WEEKEND 2.ª EDICIÓN · PÁGINA + PANEL ADMIN
+====================================================
+
+Contenido de la carpeta
+  index.html            Página pública con el formulario de inscripción
+  admin.html            Panel de administración (Centro de mando)
+  img/                  Fotos, logos y certificado (súbela junto a los .html)
+  supabase_setup.sql    Script para preparar tu Supabase (se ejecuta UNA vez)
+
+
+PASO 1 · Preparar Supabase (5 minutos)
+--------------------------------------
+1. Entra a supabase.com → tu proyecto → SQL Editor → New query.
+2. Pega TODO el contenido de supabase_setup.sql y toca "Run".
+   - Crea las tablas de sedes, talleres, planes, códigos, gastos y configuración.
+   - Agrega columnas nuevas a inscripciones_survival (no borra nada de la 1.ª edición).
+   - Carga las sedes (Riobamba 14-15 nov en ESPOCH, Guayaquil 27-28 nov con la ASO de
+     Enfermería UESS, Guayaquil 2.ª etapa con la ASO de Medicina UESS, y las demás
+     ciudades por confirmar), los 4 talleres con sus planes y la cuenta de Dayanne.
+   - Protege los datos: el público ya NO puede leer inscripciones ni comprobantes.
+3. Administradores: el script autoriza a kevindiaz06.1999@gmail.com.
+   Ese correo debe existir en Authentication → Users (si entras al panel con otro
+   correo, cámbialo en la línea "insert into public.sw_admins" y vuelve a ejecutar).
+   Para que Dayanne también entre: créale un usuario en Authentication → Users y
+   agrégala desde el panel (Configuración → Administradores).
+
+
+PASO 2 · Subir los archivos
+---------------------------
+Sube index.html, admin.html y la carpeta img/ al mismo lugar donde está hoy tu página
+(Netlify, Vercel, etc.), reemplazando los archivos anteriores.
+
+
+PASO 3 · Dejar todo listo desde el panel (admin.html)
+-----------------------------------------------------
+- Sedes: pega el link del grupo de WhatsApp de cada sede, revisa fechas, coordinador
+  y cupo. Solo las sedes en estado "Abierta" reciben inscripciones.
+- Códigos ASO: crea los códigos de cada asociación (por ejemplo ESPOCH2026) con su
+  comisión. Solo los códigos activos dan el precio con descuento.
+- Configuración: si tienes un link fijo de Payphone, pégalo; si no, el estudiante
+  pide el link por WhatsApp a la coordinación general.
+
+
+Cómo funciona día a día
+-----------------------
+1. El estudiante se inscribe: elige sede, un taller por día (con su plan), pone el
+   código de su asociación y sube el comprobante, o elige Payphone.
+2. En el panel → Inscritos, abres la inscripción, ves el comprobante y tocas
+   "Aprobar pago". Se abre WhatsApp con el mensaje y el link del grupo de su sede.
+3. El estudiante también puede ver su estado en la página, sección "Mi inscripción",
+   con su correo y su número. Si ya está aprobado, ve el botón para unirse al grupo.
+4. Contabilidad: registra cada gasto (con foto del comprobante). El panel calcula
+   ingresos confirmados, comisión de cada asociación, gastos y utilidad por sede.
+
+
+Importante
+----------
+- Ejecuta el SQL ANTES de subir la nueva página: la página nueva guarda columnas que
+  solo existen después del script.
+- Los comprobantes ahora son privados. El panel los abre con links temporales,
+  incluidos los de la 1.ª edición.
+- Si Supabase falla, la página igual se ve (usa datos de respaldo) y, si no puede
+  guardar la inscripción, le pide al estudiante enviar sus datos por WhatsApp.
