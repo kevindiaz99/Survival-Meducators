@@ -151,6 +151,7 @@ td.num,th.num{text-align:right}
     <button class="tab" data-v="contab">💰 Contabilidad</button>
     <button class="tab" data-v="config">⚙️ Configuración</button>
     <button class="tab" data-v="huerfanos">🔍 Comprobantes sueltos</button>
+    <button class="tab" data-v="historial">🕓 Historial</button>
   </div></div>
 
   <main>
@@ -234,6 +235,17 @@ td.num,th.num{text-align:right}
         <div class="bar" style="margin-top:10px"><input id="newAdmin" type="email" placeholder="correo@ejemplo.com"><button class="btn" onclick="addAdmin()">+ Agregar</button></div></div>
     </section>
 
+    <!-- HISTORIAL -->
+    <section class="view" id="v-historial">
+      <div class="vh"><div><h2>Historial de cambios</h2><p>Cada cambio queda guardado con el correo de quien lo hizo, la fecha y qué cambió. Nadie puede borrar este historial.</p></div><button class="btn g" onclick="loadHist()">↻ Actualizar</button></div>
+      <div class="bar">
+        <select id="hUser" onchange="renderHist()"><option value="">Todas las personas</option></select>
+        <select id="hTabla" onchange="renderHist()"><option value="">Todo</option><option value="inscripciones_survival">Inscripciones</option><option value="sw_sedes">Sedes</option><option value="sw_talleres">Talleres</option><option value="sw_planes">Planes y precios</option><option value="sw_codigos">Códigos ASO</option><option value="sw_gastos">Gastos</option><option value="sw_config">Configuración</option><option value="sw_admins">Administradores</option></select>
+        <select id="hAcc" onchange="renderHist()"><option value="">Todas las acciones</option><option value="crear">Creó</option><option value="editar">Editó</option><option value="eliminar">Eliminó</option></select>
+      </div>
+      <div class="tw"><table><thead><tr><th>Fecha</th><th>Quién</th><th>Acción</th><th>Dónde</th><th>Qué cambió</th></tr></thead><tbody id="tHist"></tbody></table></div>
+    </section>
+
     <!-- HUÉRFANOS -->
     <section class="view" id="v-huerfanos">
       <div class="vh"><div><h2>Comprobantes sueltos</h2><p>Archivos subidos al bucket que no están unidos a ninguna inscripción (por ejemplo, si al estudiante se le cayó la conexión).</p></div><button class="btn o" id="scanBtn" onclick="scanOrphans()">🔍 Buscar</button></div>
@@ -297,7 +309,7 @@ document.querySelectorAll('.tab').forEach(b => b.addEventListener('click', () =>
 function showView(v){
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('on', t.dataset.v === v));
   document.querySelectorAll('.view').forEach(x => x.classList.toggle('on', x.id === 'v-' + v));
-  ({ resumen:renderResumen, inscritos:renderInscritos, sedes:renderSedes, talleres:renderTalleres, codigos:renderCodigos, contab:renderContab, config:renderConfig })[v]?.();
+  ({ historial:loadHist, resumen:renderResumen, inscritos:renderInscritos, sedes:renderSedes, talleres:renderTalleres, codigos:renderCodigos, contab:renderContab, config:renderConfig })[v]?.();
 }
 
 /* ---------- CARGA ---------- */
@@ -410,7 +422,12 @@ async function openIns(id){
       <div class="f"><label>Asociación</label><input id="e-aso" value="${esc(r.asociacion||'')}"></div>
       <div class="f full"><label>Notas internas</label><textarea id="e-notas">${esc(r.notas_admin||'')}</textarea></div>
     </div>
+    <h3 style="font-size:1.2rem">Historial de esta inscripción</h3><div id="insHist" class="mt">Cargando…</div>
     <div class="mact"><button class="btn bad sm" style="margin-right:auto" onclick="delIns(${r.id})">🗑 Eliminar</button><button class="btn g" onclick="closeModal()">Cerrar</button><button class="btn" onclick="saveIns(${r.id})">Guardar cambios</button></div>`);
+  SB.from('sw_auditoria').select('*').eq('tabla', CONFIG.TABLE).eq('registro_id', String(r.id)).order('fecha', { ascending:false }).limit(30).then(({ data, error }) => {
+    const el = $('insHist'); if (!el) return;
+    el.innerHTML = error ? 'Historial no disponible (ejecuta supabase_auditoria.sql).' : (data && data.length ? data.map(h => `<div style="padding:6px 0;border-bottom:1px solid var(--light)"><b>${fdate(h.fecha)}</b> · ${esc(h.usuario)} · ${esc(ACC[h.accion]||h.accion)}${h.accion==='editar'?': '+diffTxt(h.cambios):''}</div>`).join('') : 'Sin cambios registrados todavía.');
+  });
   const u = await compUrl(r); const box = $('compBox'); if (!box) return;
   if (!u) box.innerHTML = '<p class="mt">Sin comprobante adjunto' + ((r.metodo_pago||'').includes('payphone') ? ' (pago con Payphone: verifica en tu panel de Payphone).' : '.') + '</p>';
   else if (/\.pdf(\?|$)/i.test((r.comprobante_path||r.comprobante_url||''))) box.innerHTML = `<iframe src="${esc(u)}" title="Comprobante"></iframe><a href="${esc(u)}" target="_blank" rel="noopener" class="mt">Abrir en otra pestaña ↗</a>`;
@@ -680,6 +697,28 @@ async function scanOrphans(){
   b.disabled = false; b.textContent = '🔍 Buscar';
 }
 async function openPath(p){ const { data } = await SB.storage.from(CONFIG.BUCKET).createSignedUrl(p, 3600); if (data) window.open(data.signedUrl, '_blank', 'noopener'); }
+
+/* ---------- HISTORIAL ---------- */
+const ACC = { crear:'Creó', editar:'Editó', eliminar:'Eliminó' };
+const TABLAS = { inscripciones_survival:'Inscripción', sw_sedes:'Sede', sw_talleres:'Taller', sw_planes:'Plan / precio', sw_codigos:'Código ASO', sw_gastos:'Gasto', sw_config:'Configuración', sw_admins:'Administrador' };
+const CAMPOS = { estado_pago:'estado del pago', aprobado_por:'revisado por', aprobado_en:'fecha de revisión', whatsapp_enviado:'grupo enviado', precio_codigo:'precio con código', precio_regular:'precio regular', grupo_whatsapp:'link del grupo', fecha_texto:'fechas', motivo_rechazo:'motivo de rechazo', notas_admin:'notas', sede_id:'sede', codigo_valido:'validez del código', comision_pct:'comisión %', talleres_ids:'talleres de la sede', cupo_por_taller:'cupo' };
+let HIST = [];
+function fmtVal(v){ if (v == null) return '—'; if (typeof v === 'object') return JSON.stringify(v).slice(0, 80); const t = String(v); return /^\d{4}-\d\d-\d\dT/.test(t) ? fdate(t) : t.slice(0, 80); }
+function diffTxt(c){ if (!c) return ''; return Object.entries(c).filter(([k]) => !['aprobado_en'].includes(k)).map(([k, v]) => `<span style="white-space:nowrap"><b>${esc(CAMPOS[k]||k)}</b>: ${esc(fmtVal(v.antes))} → ${esc(fmtVal(v.despues))}</span>`).join(' · '); }
+async function loadHist(){
+  $('tHist').innerHTML = '<tr><td colspan="5"><div class="sp-load"></div></td></tr>';
+  const { data, error } = await SB.from('sw_auditoria').select('*').order('fecha', { ascending:false }).limit(500);
+  if (error){ $('tHist').innerHTML = '<tr><td colspan="5" class="empty">Falta ejecutar supabase_auditoria.sql en tu Supabase para activar el historial.</td></tr>'; return; }
+  HIST = data || [];
+  const users = [...new Set(HIST.map(h => h.usuario))];
+  const cur = $('hUser').value; $('hUser').innerHTML = '<option value="">Todas las personas</option>' + users.map(u => `<option ${u===cur?'selected':''}>${esc(u)}</option>`).join('');
+  renderHist();
+}
+function renderHist(){
+  const u = $('hUser').value, t = $('hTabla').value, a = $('hAcc').value;
+  const L = HIST.filter(h => (!u || h.usuario === u) && (!t || h.tabla === t) && (!a || h.accion === a));
+  $('tHist').innerHTML = L.length ? L.map(h => `<tr><td style="white-space:nowrap">${fdate(h.fecha)}</td><td class="nm">${esc(h.usuario)}</td><td><span class="pill ${h.accion==='eliminar'?'p-rechazado':h.accion==='crear'?'p-confirmado':'p-blue'}">${ACC[h.accion]||h.accion}</span></td><td>${esc(TABLAS[h.tabla]||h.tabla)}<div class="mt">${esc(h.resumen||'')}${h.tabla==='inscripciones_survival'&&h.registro_id?` · <a href="#" onclick="event.preventDefault();openIns(${+h.registro_id})">ver</a>`:''}</div></td><td style="max-width:520px">${h.accion==='editar'?diffTxt(h.cambios):h.accion==='eliminar'?'<span class="mt">Registro eliminado (los datos quedan guardados aquí)</span>':'<span class="mt">Registro nuevo</span>'}</td></tr>`).join('') : '<tr><td colspan="5" class="empty">Sin cambios con esos filtros.</td></tr>';
+}
 
 /* ---------- EXPORTAR ---------- */
 function csv(name, cols, rows){
